@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=1920, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Demo SigmaInteractive SmartTV</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <!-- Import Hls.js Player -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/hls.js@0.10.1"></script> -->
+    <!-- Focus trap example -->
+    <script src="https://unpkg.com/tabbable/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/focus-trap/dist/focus-trap.umd.js"></script>
+    <!-- Import SDK SigmaInteracive -->
+    <script src="https://dev-livestream.gviet.vn/ilp-statics/2.0.0/sigma-interactive-js.js"></script>
+    <!-- Main code js -->
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/keyCode.js"></script>
+    <script type="text/javascript" src="js/platform.js"></script>
+  </head>
+  <body>
+    <div class="main-container">
+      <div id="container-player" class="container-video">
+        <video
+          tabindex="-1"
+          id="video-player"
+          class="content-video"
+          autoplay
+          controls
+        />
+      </div>
+      <div id="btn-video" class="trap">
+        <p>
+          <a href="#"></a>
+        </p>
+      </div>
+      <div id="container-control" class="container-control">
+        <div class="title-demo">Demo SigmaInteractive SmartTV</div>
+        <div id="control-video" class="control-video" tabindex="-1">
+          <div class="progress">
+            <span id="progress-amount"></span>
+          </div>
+          <div class="time-info">
+            <span id="current-time">00:00</span> /
+            <span id="total-time">00:00</span>
+          </div>
+          <div class="control-bottom">
+            <div id="btn-play" class="trap">
+              <p>
+                <img src="./assets/images/control_play.png" class="icon" />
+                <a href="#"></a>
+              </p>
+            </div>
+            <div id="btn-pause" class="trap">
+              <p>
+                <img src="./assets/images/control_pause.png" class="icon" />
+                <a href="#"></a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="container-interactive" class="container-interactive"/>
+    </div>
+  </body>
+</html>
