@@ -1,0 +1,17 @@
+{
+    "largeIcon": "largeIcon.png",
+    "icon": "icon.png",
+    "main": "index.html",
+    "id": "com.sigma.interactive.demo",
+    "title": "SigmaInteractiveDemo",
+    "resolution": "1920x1080",
+    "type": "web",
+    "version": "1.0.0",
+    "disableBackHistoryAPI":true,
+    "bgColor": "#348663",
+    "vendor": "TCON",
+    "iconColor": "#348663",
+    "controlsRelaunch": true,
+    "handlesRelaunch": true,
+    "requiredMemory":100
+}

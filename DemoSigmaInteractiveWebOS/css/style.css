@@ -1,0 +1,152 @@
+.container-video,
+.content-video {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+a {
+  outline: 0;
+  outline-offset: 0;
+}
+
+.trap {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  height: 3rem;
+  margin: 3rem 5rem;
+}
+
+.trap.is-active {
+  background: linear-gradient(75deg, #981a10, #db120d);
+  border-radius: 5rem;
+}
+
+body {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  overflow: hidden;
+}
+
+p {
+  margin: 0 !important;
+}
+
+.main-container {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 80rem !important;
+  height: 45rem !important;
+  margin: auto;
+  background: rgb(0, 0, 0);
+  overflow: hidden;
+}
+
+.icon {
+  width: 3rem;
+  height: 3rem;
+}
+
+.progress {
+  height: 0.5rem;
+  position: relative;
+  width: 100%;
+  background-color: #777;
+  /* background-color: rgba(0,0,0,0.8); */
+}
+
+#progress-amount {
+  display: block;
+  height: 100%;
+  background: linear-gradient(75deg, #981a10, #db120d);
+  width: 0px;
+}
+
+.time-info {
+  height: 3rem;
+  font-size: 1.5rem;
+  color: white;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.title-demo {
+  height: 4rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  width: 80rem;
+  color: white;
+  background-image: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+.control-bottom {
+  /* position: absolute;
+  bottom: 0; */
+  width: 80rem;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.control-video {
+  width: 80rem;
+  height: 30%;
+  background-image: linear-gradient(
+    -180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+.container-control,
+.container-interactive {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.container-control {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.container-control.show {
+  z-index: 3 !important;
+}
+.container-interactive.show {
+  z-index: 2 !important;
+}
+
+#btn-video {
+  position: absolute !important;
+  display: block !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.iframe-interactive {
+  width: 100%;
+  height: 100%;
+}
