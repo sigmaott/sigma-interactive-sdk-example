@@ -15,15 +15,23 @@ Thêm Script:
    Example (main.js):
 
    ```javascript
+   const SOURCE_URL = "https://dev-livestream.gviet.vn/manifest/VTV1-PACKAGE/master.m3u8";
+   var videoElement = document.getDocumentById("video-id-tag");
    var player = new Hls({ enableWorker: true, debug: false });
-   var interactiveSdk = SigmaInteractive.createInteractiveApp({
-       hls: player,//require
-       userData: {},//require
-       containerId: "div-id-container",//require
-       iframeSrc:
-         "https://dev-livestream.gviet.vn/ilp-statics/2.0.0/webos-interactive.html",//option
-     });
-     
+   
+   player.attachMedia(videoElement);
+   player.on(Hls.Events.MEDIA_ATTACHED, function () {
+       player.loadSource(SOURCE_URL);
+       // Khởi tạo SigmaInteractive SDK 
+       var interactiveSdk = SigmaInteractive.createInteractiveApp({
+           hls: player,//require
+           userData: {},//require
+           containerId: "div-id-container",//require
+           iframeSrc:
+           "https://dev-livestream.gviet.vn/ilp-statics/2.0.0/webos-interactive.html",//option
+       });
+       // Đăng ký lắng nghe sự kiện...
+   });
    ```
 
 2. ##### Sử dụng:
