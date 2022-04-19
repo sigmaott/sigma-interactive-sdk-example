@@ -38,16 +38,13 @@ import org.json.JSONObject;
 import java.util.Set;
 
 public class PlayerActivity extends Activity {
-    private static boolean DEBUG = false;
-    private static boolean DEBUG_URL = true;
     View containerView;
     //  private static boolean DEBUG = false;
     public static final String VERSION = "2.0.0";
-    private static final String HTML_SDK = DEBUG_URL ? "https://dev-livestream.gviet.vn/ilp-statics/[SDK_VERSION]/android-mobile-interactive.html" : "https://resource-ott.gviet.vn/sdk/[SDK_VERSION]/android-mobile-interactive.html";
+    private static final String HTML_SDK = "https://dev-livestream.gviet.vn/ilp-statics/[SDK_VERSION]/android-mobile-interactive.html";
     private static String sourcePlay = "https://dev-livestream.gviet.vn/manifest/VTV2-PACKAGE/master.m3u8";
     ExoPlayer player;
     Boolean isPlaying;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +65,8 @@ public class PlayerActivity extends Activity {
                             String value = ((TextInformationFrame) entry).value;
                             Log.d("DesString=>Instance", des);
                             if (des.toUpperCase().equals("TXXX")) {
-                                if (SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).getInteractiveView() != null) {
-                                    SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).sendID3InstantInteractive(value);
+                                if(SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView() != null) {
+                                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendID3InstantInteractive(value);
                                 }
                             }
                         }
@@ -89,8 +86,8 @@ public class PlayerActivity extends Activity {
                             String value = ((TextInformationFrame) entry).value;
                             Log.d("DesString=>", des);
                             if (des.toUpperCase().equals("TXXX")) {
-                                if (SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).getInteractiveView() != null) {
-                                    SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).sendID3Interactive(value);
+                                if(SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView() != null) {
+                                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendID3Interactive(value);
                                 }
                             }
                         }
@@ -112,14 +109,12 @@ public class PlayerActivity extends Activity {
         Log.d("onConfigurationChanged", String.valueOf(newConfig.orientation));
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
+            SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
         } else {
-            SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
+            SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
         }
     }
-
-    private void setupPlayer() {
-        Log.d("setupPlayer=>", sourcePlay);
+    private void setupPlayer(){
         Uri videoUri = Uri.parse(sourcePlay);
         MediaItem mediaItem = MediaItem.fromUri(videoUri);
         // Set the media item to be played.
@@ -140,10 +135,11 @@ public class PlayerActivity extends Activity {
         if (containerView == null) return;
         Bundle params = getIntent().getExtras();
         String interactiveLink = ""; // or other values
-        if (params != null) {
+        if(params != null){
             interactiveLink = params.getString("interactiveLink");
         }
         String url = interactiveLink.length() > 0 ? interactiveLink : HTML_SDK.replace("[SDK_VERSION]", VERSION);
+
         SigmaWebViewCallback sigmaWebviewCallback = new SigmaWebViewCallback() {
             //Sự kiện khi sdk tương tác sẵn sàng
             @Override
@@ -159,16 +155,10 @@ public class PlayerActivity extends Activity {
                         }
                     }
                 }
-                SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).getInteractiveView();
+                SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView();
                 Log.d("onReady=>", userDataSend.toString());
                 if (interactiveView != null) {
-                    if (xInteractiveView != 0 || yInteractiveView != 0 || widthInteractiveView != FrameLayout.LayoutParams.MATCH_PARENT || heightInteractiveView != FrameLayout.LayoutParams.MATCH_PARENT) {
-                        SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).setLayoutInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, widthPlayer, heightPlayer, xPlayer, yPlayer);
-                    }
                     interactiveView.sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
-                    double leftP = (double) xPlayer / widthInteractiveView, rightP = (double) (widthPlayer + xPlayer) / widthInteractiveView, topP = (double) yPlayer / heightInteractiveView, bottomP = (double) (yPlayer + heightPlayer) / heightInteractiveView;
-                    interactiveView.sendRectPlayer(leftP, rightP, bottomP, topP);
-                    interactiveView.requestFocus();
                 }
             }
 
@@ -202,14 +192,14 @@ public class PlayerActivity extends Activity {
                 PlayerActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
         };
-        SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).openInteractiveViewWithCallback(widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback);
+        SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
     }
 
     @Override
     protected void onDestroy() {
         player.release();
         isPlaying = false;
-        SigmaInteractiveHelper.getInstance(containerView, PlayerActivity.this).clearInterActiveView();
+        SigmaInteractiveHelper.getInstance(PlayerActivity.this).clearInterActiveView();
         super.onDestroy();
     }
 
