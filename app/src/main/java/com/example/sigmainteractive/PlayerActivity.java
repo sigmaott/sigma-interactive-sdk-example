@@ -44,7 +44,7 @@ public class PlayerActivity extends Activity {
     //  private static boolean DEBUG = false;
     public static final String VERSION = "2.0.0";
     private static final String HTML_SDK = DEBUG_URL ? "https://dev-livestream.gviet.vn/ilp-statics/[SDK_VERSION]/android-mobile-interactive.html" : "https://resource-ott.gviet.vn/sdk/[SDK_VERSION]/android-mobile-interactive.html";
-    private static final String sourcePlay = "https://dev-livestream.gviet.vn/manifest/VTV2-PACKAGE/master.m3u8";
+    private static String sourcePlay = "https://dev-livestream.gviet.vn/manifest/VTV2-PACKAGE/master.m3u8";
     ExoPlayer player;
     Boolean isPlaying;
 
@@ -100,6 +100,10 @@ public class PlayerActivity extends Activity {
         });
         StyledPlayerView playerView = (StyledPlayerView) findViewById(R.id.player_view);
         playerView.setPlayer(player);
+        Bundle params = getIntent().getExtras();
+        if (params != null && params.getString("videoLink").length() > 0) {
+            sourcePlay = params.getString("videoLink");
+        }
         setupPlayer();
     }
 
@@ -115,6 +119,7 @@ public class PlayerActivity extends Activity {
     }
 
     private void setupPlayer() {
+        Log.d("setupPlayer=>", sourcePlay);
         Uri videoUri = Uri.parse(sourcePlay);
         MediaItem mediaItem = MediaItem.fromUri(videoUri);
         // Set the media item to be played.
