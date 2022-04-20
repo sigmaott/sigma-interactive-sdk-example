@@ -22,7 +22,7 @@ dependencies {
 
 2. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
 
-   `SigmaRendererFactory` xem trong demo
+   [SigmaRendererFactory](https://github.com/phamngochai123/sigma-interactive-sdk-example/blob/mobile-android/app/src/main/java/com/example/sigmainteractive/SigmaRendererFactory.java) xem trong demo
 
    ```java
    DefaultRenderersFactory renderersFactory = new SigmaRendererFactory(getApplicationContext(), new SigmaRendererFactory.Id3ParsedListener() {
