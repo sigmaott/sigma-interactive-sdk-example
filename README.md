@@ -18,6 +18,73 @@ dependencies {
 
 ### II. Sử dụng
 
+1. Thêm SigmaInteractive sdk vào project (mục **I**).
+
+2. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
+
+   `SigmaRendererFactory` xem trong demo
+
+   ```java
+   DefaultRenderersFactory renderersFactory = new SigmaRendererFactory(getApplicationContext(), new SigmaRendererFactory.Id3ParsedListener() {
+       @Override
+       public void onId3Parsed(Metadata metadata) {
+           if (metadata != null) {
+               for (int i = 0; i < metadata.length(); i++) {
+                   Metadata.Entry entry = metadata.get(i);
+                   if (entry instanceof TextInformationFrame) {
+                       String des = ((TextInformationFrame) entry).description;
+                       String value = ((TextInformationFrame) entry).value;
+                       if (des.toUpperCase().equals("TXXX")) {
+                           if(SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView() != null) {
+                               SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendID3InstantInteractive(value);
+                           }
+                       }
+                   }
+               }
+           }
+       }
+   });
+   player = new ExoPlayer.Builder(this, renderersFactory).build();
+   ```
+
+3. Thêm sự kiện lắng nghe khi id3 trả ra đúng thời điểm hẹn giờ để gửi dữ liệu cho sdk tương tác
+
+   ```java
+   player.addAnalyticsListener(new AnalyticsListener() {
+       @Override
+       public void onMetadata(AnalyticsListener.EventTime eventTime, Metadata metadata) {
+           if (metadata != null) {
+               for (int i = 0; i < metadata.length(); i++) {
+                   Metadata.Entry entry = metadata.get(i);
+                   if (entry instanceof TextInformationFrame) {
+                       String des = ((TextInformationFrame) entry).description;
+                       String value = ((TextInformationFrame) entry).value;
+                       if (des.toUpperCase().equals("TXXX")) {
+                           if(SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView() != null) {
+                               SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendID3Interactive(value);
+                           }
+                       }
+                   }
+               }
+           }
+       }
+   });
+   ```
+
+4. Tạo SigmaWebViewCallback để lắng nghe các sự kiện từ sdk tương tác.
+
+   2.1 Trong hàm onReady gửi dữ liệu user dạng json string cho sdk tương tác (bắt buộc)
+
+   ```java
+   SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
+   ```
+
+5. Mở view tương tác với vị trí (vị trí (x: 0, y: 0) ở góc trên bên trái màn hình), kích thước. Kích thước player, vị trí player so với view tương tác để sdk tương tác tính toán hiển thị.
+
+   ```java
+   SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
+   ```
+
 - #### SigmaInteractiveHelper
 
   #### - openInteractiveView - Mở view tương tác:
@@ -29,16 +96,28 @@ dependencies {
   
   
   - `PlayerActivity`: Activity muốn đặt view tương tác.
+  
   - `xInteractive`: Vị trí muốn đặt view tương tác theo trục x.
+  
   - `yInteractive`: Vị trí muốn đặt view tương tác theo trục y.
+  
   - `widthInteractiveView`: Chiều rộng của view tương tác.
+  
   - `heightInteractiveView`: Chiều cao của view tương tác.
+  
   - `url`: Link tương tác.
+  
   - `widthPlayer`: Chiều rộng của player.
+  
   - `heightPlayer`: Chiều caocủa player.
+  
   - `xPlayer`: Vị trí player theo trục x.
+  
   - `yPlayer`: Vị trí player theo trục y.
+  
   - `sigmaWebviewCallback`: Nghe các sự kiện bên tương tác gọi.
+  
+    #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu user cho sdk qua hàm `sendOnReadyBack` 
 
 ```java
 ex:
