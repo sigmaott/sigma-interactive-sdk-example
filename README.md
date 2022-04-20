@@ -73,7 +73,7 @@ dependencies {
 
 4. Tạo SigmaWebViewCallback để lắng nghe các sự kiện từ sdk tương tác.
 
-   2.1 Trong hàm onReady gửi dữ liệu user dạng json string cho sdk tương tác (bắt buộc)
+   4.1 Trong hàm onReady gửi dữ liệu dạng json string cho sdk tương tác (bắt buộc)
 
    ```java
    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");

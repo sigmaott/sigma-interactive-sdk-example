@@ -158,7 +158,7 @@ public class PlayerActivity extends Activity {
                 SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView();
                 Log.d("onReady=>", userDataSend.toString());
                 if (interactiveView != null) {
-                    interactiveView.sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
+                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
                 }
             }
 
