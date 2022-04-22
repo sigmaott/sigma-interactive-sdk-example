@@ -64,7 +64,7 @@ Project -> app target -> General -> Embedded Binaries
        }
    ```
 
-5. Mở view tương tác, set dữ liệu user, set callback để bắt sự kiện view tương tác khi player bắt đầu play.
+5. Mở view tương tác, set dữ liệu user (bắt buộc), set callback để bắt sự kiện view tương tác khi player bắt đầu play.
 
    *Lưu ý: callback implement SigmaJSInterface
 
