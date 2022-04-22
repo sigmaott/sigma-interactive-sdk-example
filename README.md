@@ -8,13 +8,13 @@ Thêm file [SigmaInteractiveSDK.framework](https://github.com/phamngochai123/sig
 
 Project -> app target -> General -> Embedded Binaries
 
-![Screen Shot 2022-04-22 at 16.27.50](/Users/phamhai/Desktop/Screen Shot 2022-04-22 at 16.27.50.png)
+![Screen Shot 2022-04-22 at 16.27.50](https://i.ibb.co/YyLx4C8/Screen-Shot-2022-04-22-at-16-27-50.png)
 
-![Screen Shot 2022-04-22 at 16.12.18](/Users/phamhai/Desktop/Screen Shot 2022-04-22 at 16.12.18.png)
+![Screen Shot 2022-04-22 at 16.12.18](https://i.ibb.co/FgcCzQW/Screen-Shot-2022-04-22-at-16-12-18.png)
 
-![Screen Shot 2022-04-22 at 16.15.41](/Users/phamhai/Desktop/Screen Shot 2022-04-22 at 16.15.41.jpg)
+![Screen Shot 2022-04-22 at 16.15.41](https://i.ibb.co/CbhjSLh/Screen-Shot-2022-04-22-at-16-15-41.jpg)
 
-![Screen Shot 2022-04-22 at 16.17.27](/Users/phamhai/Desktop/Screen Shot 2022-04-22 at 16.17.27.jpg)
+![Screen Shot 2022-04-22 at 16.17.27](https://i.ibb.co/M9489JD/Screen-Shot-2022-04-22-at-16-17-27.jpg)
 
 ### II. Sử dụng
 
