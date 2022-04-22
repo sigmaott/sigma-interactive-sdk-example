@@ -236,10 +236,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
             let metadataOutput = AVPlayerItemMetadataOutput();
             metadataOutput.advanceIntervalForDelegateInvocation = TimeInterval(Int.max);
             metadataOutput.setDelegate(self, queue: DispatchQueue.main);
-//            let metadataCollector = AVPlayerItemMetadataCollector();
-//            metadataCollector.setDelegate(self, queue: DispatchQueue.main);
             playerItem!.add(metadataOutput);
-//            playerItem!.add(metadataCollector);
             playerItem?.addObserver(self, forKeyPath: keyTimedMetadata, options: [], context: nil)
         }
     }
