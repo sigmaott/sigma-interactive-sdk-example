@@ -1,0 +1,11 @@
+framework module SigmaInteractiveSDK {
+  umbrella header "SigmaInteractiveSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module SigmaInteractiveSDK.Swift {
+    header "SigmaInteractiveSDK-Swift.h"
+    requires objc
+}
