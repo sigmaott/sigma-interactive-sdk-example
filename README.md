@@ -1,6 +1,6 @@
 # SigmaInteractive SDK
 
-## Requirement: IOS 11.0+
+## Requirement: IOS 11.0+. Run on physical device.
 
 ### I. Cài đặt
 
