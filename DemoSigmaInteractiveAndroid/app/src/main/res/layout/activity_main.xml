@@ -56,7 +56,7 @@
                     android:id="@+id/txtInputLink"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="https://dev-livestream.gviet.vn/ilp-statics/2.0.0/android-mobile-interactive.html" />
+                    android:text="https://dev-livestream.gviet.vn/ilp-statics/3.0.0/android-mobile-interactive.html" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView

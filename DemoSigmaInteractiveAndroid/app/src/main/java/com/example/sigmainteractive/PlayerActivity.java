@@ -10,13 +10,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -27,6 +31,7 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
@@ -37,10 +42,11 @@ import org.json.JSONObject;
 
 import java.util.Set;
 
-public class PlayerActivity extends Activity {
+public class PlayerActivity extends Activity implements Player.Listener {
     View containerView;
     //  private static boolean DEBUG = false;
-    public static final String VERSION = "2.0.0";
+    int estimatedKeyboardHeight = 0;
+    public static final String VERSION = "3.0.0";
     private static final String HTML_SDK = "https://dev-livestream.gviet.vn/ilp-statics/[SDK_VERSION]/android-mobile-interactive.html";
     private static String sourcePlay = "https://dev-livestream.gviet.vn/manifest/VTV2-PACKAGE/master.m3u8";
     ExoPlayer player;
@@ -53,6 +59,7 @@ public class PlayerActivity extends Activity {
         //
         setContentView(R.layout.activity_player);
         containerView = this.findViewById(android.R.id.content);
+//        setKeyboardVisibilityListener(this);
         isPlaying = false;
         DefaultRenderersFactory renderersFactory = new SigmaRendererFactory(getApplicationContext(), new SigmaRendererFactory.Id3ParsedListener() {
             @Override
@@ -105,8 +112,29 @@ public class PlayerActivity extends Activity {
     }
 
     @Override
+    public void onIsPlayingChanged(boolean isPlaying) {
+        Player.Listener.super.onIsPlayingChanged(isPlaying);
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        Player.Listener.super.onPlayerStateChanged(playWhenReady, playbackState);
+        if(playbackState == Player.STATE_READY) {
+            Log.d("onPlayerStateChanged=>", "ready");
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = displayMetrics.heightPixels;
+            int width = displayMetrics.widthPixels;
+            StyledPlayerView playerView = (StyledPlayerView) findViewById(R.id.player_view);
+            int widthPlayer = playerView.getWidth();
+            int heightPlayer = playerView.getHeight();
+            this.openInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0, null);
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.d("onConfigurationChanged", String.valueOf(newConfig.orientation));
+        Log.d("onConfigurationChanged", String.valueOf(newConfig.hardKeyboardHidden));
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
@@ -119,18 +147,26 @@ public class PlayerActivity extends Activity {
         MediaItem mediaItem = MediaItem.fromUri(videoUri);
         // Set the media item to be played.
         player.setMediaItem(mediaItem);
+        player.addListener(this);
         // Prepare the player.
         player.prepare();
         // Start the playback.
         player.play();
         isPlaying = true;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-        this.openInteractiveView(0, 0, width, height, width, height, 0, 0, null);
     }
-
+    public JSONObject getDataSend() {
+        JSONObject dataSend = null;
+        try {
+            dataSend = new JSONObject("{}");
+            dataSend.put("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5NzI5NTIyNzIiLCJleHAiOjE2NTQ2NzMzNzQsInJvbGUiOiJ1c2VyIiwiYXBwSWQiOiJkZWZhdWx0LWFwcCIsInVzZXJEYXRhIjp7fX0.-WuVJ5C84j1NOYF1CHYXJr-ZB6hj3uAhyqb_7Ox7hwY");
+            dataSend.put("channelId", "c9c2ebfb-2887-4de6-aec4-0a30aa848915");
+            dataSend.put("overlay", true);
+            dataSend.put("panel", true);
+        } catch (JSONException err){
+            Log.d("Error", err.toString());
+        }
+        return dataSend;
+    }
     private void openInteractiveView(int xInteractiveView, int yInteractiveView, int widthInteractiveView, int heightInteractiveView, int widthPlayer, int heightPlayer, int xPlayer, int yPlayer, Bundle userData) {
         if (containerView == null) return;
         Bundle params = getIntent().getExtras();
@@ -158,7 +194,16 @@ public class PlayerActivity extends Activity {
                 SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView();
                 Log.d("onReady=>", userDataSend.toString());
                 if (interactiveView != null) {
-                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
+                    JSONObject dataSend = getDataSend();
+                    Runnable sendData = new Runnable() {
+                        @Override
+                        public void run() {
+                            SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(dataSend);
+                        }
+                    };
+                    Handler mHandler = new Handler();
+                    mHandler.postDelayed(sendData, 5000);
+//                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(dataSend);
                 }
             }
 
@@ -191,15 +236,34 @@ public class PlayerActivity extends Activity {
                 Log.d("PlayerActivity=>", "onExitFullScreen");
                 PlayerActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+
+            @Override
+            public void fullReload() {
+                JSONObject finalDataSend = getDataSend();
+                Runnable sendData = new Runnable() {
+                    @Override
+                    public void run() {
+                        SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(finalDataSend);
+                    }
+                };
+                Handler mHandler = new Handler();
+                mHandler.postDelayed(sendData, 0);
+            }
+
+            @Override
+            public void setSession(String session) {
+                Log.d("setSession=>", session);
+            }
         };
         SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
     }
 
     @Override
     protected void onDestroy() {
+        Log.d("onPlayerStateChanged=>", "onDestroy");
+        SigmaInteractiveHelper.getInstance(PlayerActivity.this).clearInterActiveView();
         player.release();
         isPlaying = false;
-        SigmaInteractiveHelper.getInstance(PlayerActivity.this).clearInterActiveView();
         super.onDestroy();
     }
 
@@ -209,5 +273,34 @@ public class PlayerActivity extends Activity {
         player.release();
         isPlaying = false;
         super.onPause();
+    }
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        containerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, containerView.getResources().getDisplayMetrics());
+                Log.d("estimatedKeyboardHeight=>", String.valueOf(estimatedKeyboardHeight));
+                containerView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = containerView.getRootView().getHeight() - (rect.bottom + rect.top);
+                Log.d("heightDiff=>", String.valueOf(heightDiff));
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                if(isShown) {
+                    estimatedKeyboardHeight = heightDiff;
+                }
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
     }
 }
