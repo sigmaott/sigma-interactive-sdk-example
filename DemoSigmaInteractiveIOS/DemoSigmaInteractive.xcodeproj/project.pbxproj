@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9B4F04B52812ACF40002F0CB /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B66463928477116005E0399 /* SigmaInteractiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */; };
+		9B66463A28477127005E0399 /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B7D8F6A27F43D4000C683D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6927F43D4000C683D4 /* AppDelegate.swift */; };
 		9B7D8F6C27F43D4000C683D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6B27F43D4000C683D4 /* SceneDelegate.swift */; };
 		9B7D8F6E27F43D4000C683D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6D27F43D4000C683D4 /* ViewController.swift */; };
@@ -18,6 +19,16 @@
 		9B85CBF327FAA3A700B7C935 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85CBF227FAA3A700B7C935 /* AppUtility.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9B664636284770F9005E0399 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9B4F048D28128B1E0002F0CB;
+			remoteInfo = SigmaInteractiveSDK;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		9B4F0446281276850002F0CB /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -25,7 +36,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9B4F04B52812ACF40002F0CB /* SigmaInteractiveSDK.framework in Embed Frameworks */,
+				9B66463A28477127005E0399 /* SigmaInteractiveSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -34,6 +45,8 @@
 
 /* Begin PBXFileReference section */
 		9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
+		9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SigmaInteractiveSDK.xcodeproj; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.xcodeproj"; sourceTree = "<group>"; };
+		9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
 		9B7D8F6627F43D4000C683D4 /* DemoSigmaInteractive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoSigmaInteractive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B7D8F6927F43D4000C683D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B7D8F6B27F43D4000C683D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,12 +64,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B66463928477116005E0399 /* SigmaInteractiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B664632284770F9005E0399 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9B664637284770F9005E0399 /* SigmaInteractiveSDK.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		9B7D8F5D27F43D4000C683D4 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +116,8 @@
 		9B7D8F8627F43E1F00C683D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */,
+				9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -145,12 +169,28 @@
 			mainGroup = 9B7D8F5D27F43D4000C683D4;
 			productRefGroup = 9B7D8F6727F43D4000C683D4 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 9B664632284770F9005E0399 /* Products */;
+					ProjectRef = 9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				9B7D8F6527F43D4000C683D4 /* DemoSigmaInteractive */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		9B664637284770F9005E0399 /* SigmaInteractiveSDK.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SigmaInteractiveSDK.framework;
+			remoteRef = 9B664636284770F9005E0399 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9B7D8F6427F43D4000C683D4 /* Resources */ = {
