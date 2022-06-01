@@ -59,7 +59,6 @@ public class PlayerActivity extends Activity implements Player.Listener {
         //
         setContentView(R.layout.activity_player);
         containerView = this.findViewById(android.R.id.content);
-//        setKeyboardVisibilityListener(this);
         isPlaying = false;
         DefaultRenderersFactory renderersFactory = new SigmaRendererFactory(getApplicationContext(), new SigmaRendererFactory.Id3ParsedListener() {
             @Override
@@ -239,6 +238,7 @@ public class PlayerActivity extends Activity implements Player.Listener {
 
             @Override
             public void fullReload() {
+                //force get new token and send data with new token to onReadyBack function
                 JSONObject finalDataSend = getDataSend();
                 Runnable sendData = new Runnable() {
                     @Override
@@ -273,34 +273,5 @@ public class PlayerActivity extends Activity implements Player.Listener {
         player.release();
         isPlaying = false;
         super.onPause();
-    }
-    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
-        containerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            private boolean alreadyOpen;
-            private final int defaultKeyboardHeightDP = 100;
-            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
-            private final Rect rect = new Rect();
-
-            @Override
-            public void onGlobalLayout() {
-                estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, containerView.getResources().getDisplayMetrics());
-                Log.d("estimatedKeyboardHeight=>", String.valueOf(estimatedKeyboardHeight));
-                containerView.getWindowVisibleDisplayFrame(rect);
-                int heightDiff = containerView.getRootView().getHeight() - (rect.bottom + rect.top);
-                Log.d("heightDiff=>", String.valueOf(heightDiff));
-                boolean isShown = heightDiff >= estimatedKeyboardHeight;
-
-                if (isShown == alreadyOpen) {
-                    Log.i("Keyboard state", "Ignoring global layout change...");
-                    return;
-                }
-                alreadyOpen = isShown;
-                if(isShown) {
-                    estimatedKeyboardHeight = heightDiff;
-                }
-                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
-            }
-        });
     }
 }
