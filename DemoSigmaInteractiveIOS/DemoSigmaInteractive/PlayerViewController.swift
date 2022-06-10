@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 import SigmaInteractiveSDK
-
+import WebKit
 
 let redirectScheme = "cplp";
 let customPlaylistScheme = "cplp";
@@ -19,7 +19,7 @@ let httpScheme = "http";
 let badRequestErrorCode = 400;
 let redirectErrorCode = 302;
 
-class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMetadataOutputPushDelegate, AVAssetResourceLoaderDelegate, AVPlayerItemMetadataCollectorPushDelegate {
+class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMetadataOutputPushDelegate, AVAssetResourceLoaderDelegate, AVPlayerItemMetadataCollectorPushDelegate, WKNavigationDelegate {
     
     func metadataCollector(_ metadataCollector: AVPlayerItemMetadataCollector, didCollect metadataGroups: [AVDateRangeMetadataGroup], indexesOfNewGroups: IndexSet, indexesOfModifiedGroups: IndexSet) {
         //
@@ -45,6 +45,16 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
         print("SigmaJSInterface=>onExitFullScreen")
     }
     
+    func fullReload() {
+        print("SigmaJSInterface=>fullReload")
+        setDataToInteractive(isReload: true)
+        sendDataToInteractive()
+    }
+    
+    func setSession(_ session: String) {
+        print("SigmaJSInterface=>setSession", session)
+    }
+    
     var interactiveLink: String = "";
     var videoUrl: String = "";
     var fullScreenAnimationDuration: TimeInterval {
@@ -58,6 +68,11 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
     var playerItem: AVPlayerItem?;
     var topSafeArea = 0.0
     var bottomSafeArea = 0.0
+    var tokenApp = ""
+    var uid = ""
+    var userRole = ""
+    var userData:[String: String] = [:]
+    var channelId = ""
     var layer: AVPlayerLayer = AVPlayerLayer();
     private var videoPlayer: AVPlayer?
     
@@ -100,10 +115,10 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
     func minimizeToFrame() {
         UIView.animate(withDuration: fullScreenAnimationDuration) {
             let heightVideo = self.widthDevice * (9/16);
-            self.layer.frame = CGRect(x: 0, y: (self.heightDevice - heightVideo)/2, width: self.widthDevice, height: heightVideo)
+            self.layer.frame = CGRect(x: 0, y: 0, width: self.widthDevice, height: heightVideo)
             self.layer.videoGravity = .resizeAspectFill;
             if(self.sigmaInteractive != nil) {
-                self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
+                self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice - self.topSafeArea), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
             }
         }
     }
@@ -119,15 +134,34 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
             }
         }
     }
+    func getTokenApp() -> String {
+        return tokenApp;
+    }
+    func getTokenAppNew() -> String {
+        return GenerateToken(uid, userData, userRole).genToken();
+    }
+    func getDataSendToInteractive(isReload: Bool) -> [String: Any] {
+        var userData: [String: Any] = ["channelId": self.channelId, "appId": "default-app", "clientVersion": "3.0.0", "panel": true, "overlay": true];
+        userData["token"] = isReload ? getTokenAppNew() : getTokenApp();
+        print("getDataSendToInteractive=>", userData)
+        return userData;
+    }
+    func setDataToInteractive(isReload: Bool) {
+        let dataSend = getDataSendToInteractive(isReload: isReload);
+        self.sigmaInteractive?.setUserValue(value: dataSend);
+    }
+    func sendDataToInteractive() {
+        self.sigmaInteractive?.sendDataOnReady();
+    }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if let player = object as? AVPlayer, player == videoPlayer, keyPath == "status" {
             if player.status == .readyToPlay {
+                print("heightDevice=>", self.heightDevice, topSafeArea)
                 videoPlayer?.play()
                 let heightVideo = self.widthDevice * (9/16);
-                let userData: [String: Any] = ["id": "386", "phone": "0143100004"];
                 self.sigmaInteractive = SigmaWebview.init(interactiveLink);
-                self.sigmaInteractive?.setUserValue(value: userData);
-                self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
+                setDataToInteractive(isReload: false)
+                self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice - topSafeArea), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
                 playerView.addSubview(self.sigmaInteractive!)
                 self.sigmaInteractive?.setCallBack(sigmaInteractiveCallback: self);
             } else if player.status == .failed {
@@ -227,7 +261,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
             layer = AVPlayerLayer(player: videoPlayer);
             layer.backgroundColor = UIColor.white.cgColor
             let heightVideo = widthDevice * (9/16);
-            layer.frame = CGRect(x: 0, y: (self.heightDevice - heightVideo)/2, width: widthDevice, height: heightVideo)
+            layer.frame = CGRect(x: 0, y: 0, width: widthDevice, height: heightVideo)
             layer.videoGravity = .resizeAspectFill
             playerView.layer.sublayers?
                 .filter { $0 is AVPlayerLayer }

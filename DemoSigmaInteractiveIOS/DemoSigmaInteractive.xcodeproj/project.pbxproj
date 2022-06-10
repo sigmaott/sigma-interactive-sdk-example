@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9B66463928477116005E0399 /* SigmaInteractiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */; };
-		9B66463A28477127005E0399 /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B66463F284DFF68005E0399 /* SigmaInteractiveSDK.xcodeproj in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */; };
+		9B664640284DFF8F005E0399 /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B664637284770F9005E0399 /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B66464228517FC1005E0399 /* PopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B66464128517FC1005E0399 /* PopupWindow.swift */; };
+		9B6646472852DB23005E0399 /* CodableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6646462852DB23005E0399 /* CodableExtensions.swift */; };
+		9B6646492852DB59005E0399 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6646482852DB59005E0399 /* Utility.swift */; };
+		9B66464B2852EBF8005E0399 /* GenerateToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B66464A2852EBF8005E0399 /* GenerateToken.swift */; };
+		9B66464D2852F1C3005E0399 /* PopupSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B66464C2852F1C3005E0399 /* PopupSelect.swift */; };
 		9B7D8F6A27F43D4000C683D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6927F43D4000C683D4 /* AppDelegate.swift */; };
 		9B7D8F6C27F43D4000C683D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6B27F43D4000C683D4 /* SceneDelegate.swift */; };
 		9B7D8F6E27F43D4000C683D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6D27F43D4000C683D4 /* ViewController.swift */; };
@@ -36,7 +41,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9B66463A28477127005E0399 /* SigmaInteractiveSDK.framework in Embed Frameworks */,
+				9B664640284DFF8F005E0399 /* SigmaInteractiveSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,9 +49,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
 		9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SigmaInteractiveSDK.xcodeproj; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.xcodeproj"; sourceTree = "<group>"; };
-		9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
+		9B66464128517FC1005E0399 /* PopupWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupWindow.swift; sourceTree = "<group>"; };
+		9B6646462852DB23005E0399 /* CodableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableExtensions.swift; sourceTree = "<group>"; };
+		9B6646482852DB59005E0399 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		9B66464A2852EBF8005E0399 /* GenerateToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateToken.swift; sourceTree = "<group>"; };
+		9B66464C2852F1C3005E0399 /* PopupSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupSelect.swift; sourceTree = "<group>"; };
 		9B7D8F6627F43D4000C683D4 /* DemoSigmaInteractive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoSigmaInteractive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B7D8F6927F43D4000C683D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B7D8F6B27F43D4000C683D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B66463928477116005E0399 /* SigmaInteractiveSDK.framework in Frameworks */,
+				9B66463F284DFF68005E0399 /* SigmaInteractiveSDK.xcodeproj in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +90,6 @@
 		9B7D8F5D27F43D4000C683D4 = {
 			isa = PBXGroup;
 			children = (
-				9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */,
 				9B85CBF227FAA3A700B7C935 /* AppUtility.swift */,
 				9B7D8F6827F43D4000C683D4 /* DemoSigmaInteractive */,
 				9B7D8F6727F43D4000C683D4 /* Products */,
@@ -109,6 +116,11 @@
 				9B7D8F7427F43D4D00C683D4 /* LaunchScreen.storyboard */,
 				9B7D8F7727F43D4D00C683D4 /* Info.plist */,
 				9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */,
+				9B66464128517FC1005E0399 /* PopupWindow.swift */,
+				9B6646462852DB23005E0399 /* CodableExtensions.swift */,
+				9B6646482852DB59005E0399 /* Utility.swift */,
+				9B66464A2852EBF8005E0399 /* GenerateToken.swift */,
+				9B66464C2852F1C3005E0399 /* PopupSelect.swift */,
 			);
 			path = DemoSigmaInteractive;
 			sourceTree = "<group>";
@@ -116,7 +128,6 @@
 		9B7D8F8627F43E1F00C683D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9B66463828477116005E0399 /* SigmaInteractiveSDK.framework */,
 				9B664631284770F9005E0399 /* SigmaInteractiveSDK.xcodeproj */,
 			);
 			name = Frameworks;
@@ -139,6 +150,8 @@
 			dependencies = (
 			);
 			name = DemoSigmaInteractive;
+			packageProductDependencies = (
+			);
 			productName = DemoSigmaInteractive;
 			productReference = 9B7D8F6627F43D4000C683D4 /* DemoSigmaInteractive.app */;
 			productType = "com.apple.product-type.application";
@@ -167,6 +180,8 @@
 				Base,
 			);
 			mainGroup = 9B7D8F5D27F43D4000C683D4;
+			packageReferences = (
+			);
 			productRefGroup = 9B7D8F6727F43D4000C683D4 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -211,10 +226,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B7D8F6E27F43D4000C683D4 /* ViewController.swift in Sources */,
+				9B66464B2852EBF8005E0399 /* GenerateToken.swift in Sources */,
 				9B7D8F9127F567A300C683D4 /* PlayerViewController.swift in Sources */,
 				9B85CBF327FAA3A700B7C935 /* AppUtility.swift in Sources */,
+				9B66464D2852F1C3005E0399 /* PopupSelect.swift in Sources */,
 				9B7D8F6A27F43D4000C683D4 /* AppDelegate.swift in Sources */,
+				9B6646492852DB59005E0399 /* Utility.swift in Sources */,
+				9B66464228517FC1005E0399 /* PopupWindow.swift in Sources */,
 				9B7D8F6C27F43D4000C683D4 /* SceneDelegate.swift in Sources */,
+				9B6646472852DB23005E0399 /* CodableExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
