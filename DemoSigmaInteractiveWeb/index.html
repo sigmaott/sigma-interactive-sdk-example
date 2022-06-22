@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Sigma Interactive Web</title>
+    <!-- Styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
+
+    <!-- HLS Player -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <!-- Sigma Interactive SDK -->
+    <script src="https://resource-ott.gviet.vn/sdk/2.0.0/sigma-interactive-js.js"></script>
+  </head>
+  <body>
+    <div id="app" class="p-16px">
+      <h1 class="text-4xl font-bold mb-8px">Sigma Interactive</h1>
+
+      <div class="relative aspect-ratio-16/9 outline outline-purple-400">
+        <video id="VIDEO" class="h-full w-full" autoplay muted />
+        <div
+          id="CONTAINER"
+          class="h-full w-full inset-0 absolute"
+        />
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
