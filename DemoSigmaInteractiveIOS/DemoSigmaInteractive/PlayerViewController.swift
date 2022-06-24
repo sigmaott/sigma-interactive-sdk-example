@@ -71,7 +71,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
     var tokenApp = ""
     var uid = ""
     var userRole = ""
-    var userData:[String: String] = [:]
+    var userData:[String: Any] = [:]
     var channelId = ""
     var layer: AVPlayerLayer = AVPlayerLayer();
     private var videoPlayer: AVPlayer?
@@ -135,10 +135,10 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
         }
     }
     func getTokenApp() -> String {
-        return tokenApp;
+        return userRole == "guest" ? "" : tokenApp;
     }
     func getTokenAppNew() -> String {
-        return GenerateToken(uid, userData, userRole).genToken();
+        return userRole == "guest" ? "" : GenerateToken(uid, userData, userRole).genTokenFromApi();
     }
     func getDataSendToInteractive(isReload: Bool) -> [String: Any] {
         var userData: [String: Any] = ["channelId": self.channelId, "appId": "default-app", "clientVersion": "3.0.0", "panel": true, "overlay": true];
@@ -283,5 +283,8 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
             .forEach { $0.removeFromSuperlayer() }
         playerView.backgroundColor = .black
         self.title = ""
+    }
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        print("applicationDidBecomeActive=>")
     }
 }

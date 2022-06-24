@@ -39,6 +39,7 @@ class ViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var txtInteractiveLink: UITextView!
     @IBOutlet weak var txtVideoUrl: UITextView!
     @IBOutlet weak var btnOpenInteractive: UIButton!
+    @IBOutlet weak var btnOpenWithOldConfig: UIButton!
     @IBOutlet weak var txtError: UILabel!
     @IBOutlet weak var txtUid: UITextView!
     @IBOutlet weak var viewUserData: UIView!
@@ -56,7 +57,7 @@ class ViewController: UIViewController, UITextViewDelegate {
     let fieldKeyId = "key-"
     let fieldValueId = "value-"
     let fieldUserValueContainer = "user-"
-    var userDataValue: [[String: String]] = []
+    var userDataValue: [[String: Any]] = []
     let heightOfBtnDeleteField = 40.0
     let widthOfBtnDeleteField = 100.0
     let heightOfInPutField = 50.0
@@ -78,6 +79,18 @@ class ViewController: UIViewController, UITextViewDelegate {
         txtUid.layer.borderColor = txtBorderColor;
         txtUid.layer.cornerRadius = txtBorderRadius;
         txtUid.textContainerInset = UIEdgeInsets(top: 15, left: 4, bottom: 8, right: 4);
+        let tokenCache = getTokenCache()
+        let idCache = getIdCache()
+        let roleCache = getRoleCache()
+        if(tokenCache.count > 0 && idCache.count > 0 && roleCache.count > 0) {
+            txtUid.text = idCache
+//            btnOpenWithOldConfig.isEnabled = true;
+//            btnOpenWithOldConfig.isHidden = false;
+            listUserType.selectedSegmentIndex = getIndexUserRole(roleCache)
+        } else {
+//            btnOpenWithOldConfig.isEnabled = false;
+//            btnOpenWithOldConfig.isHidden = true;
+        }
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard));
 
@@ -112,6 +125,71 @@ class ViewController: UIViewController, UITextViewDelegate {
        super.viewWillDisappear(animated)
        AppUtility.lockOrientation(.all)
    }
+    func getTokenCache() -> String {
+        let defaults = UserDefaults.standard
+        if let tokenCache = defaults.string(forKey: DefaultsKeysUser.token) {
+            print("dataSession=>2", tokenCache)
+            return tokenCache
+        }
+        return ""
+    }
+    func getRoleCache() -> String {
+        let defaults = UserDefaults.standard
+        if let roleCache = defaults.string(forKey: DefaultsKeysUser.userRole) {
+            print("roleCache=>2", roleCache)
+            return roleCache
+        }
+        return ""
+    }
+    func getIdCache() -> String {
+        let defaults = UserDefaults.standard
+        if let idCache = defaults.string(forKey: DefaultsKeysUser.userId) {
+            print("idCache=>2", idCache)
+            return idCache
+        }
+        return ""
+    }
+    func getUserDataCache() -> [String: Any] {
+        let defaults = UserDefaults.standard
+        if let userDataCache = defaults.dictionary(forKey: DefaultsKeysUser.userData) {
+            print("userDataCache=>2", userDataCache)
+            return userDataCache
+        }
+        return [:]
+    }
+    @IBAction func openInteractiveWithOldConfig(_ sender: Any) {
+        print("open interactive=>", txtUid.isAccessibilityElement);
+        for itemFieldUser in userDataValue {
+            print("itemFieldUser=>", itemFieldUser)
+        }
+        let uidCache = getIdCache()
+        let roleCache = getRoleCache()
+        let userDataCache = getUserDataCache()
+        let token = getTokenCache()
+        let interactiveLink = txtInteractiveLink.text!, videoUrl = txtVideoUrl.text!;
+        let isEmptyInteractive = interactiveLink.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 || (!interactiveLink.hasPrefix("http://") && !interactiveLink.hasPrefix("https://"));
+        let isEmptyVideoUrl = videoUrl.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 || (!videoUrl.hasPrefix("http://") && !videoUrl.hasPrefix("https://"));
+        if(isEmptyInteractive || isEmptyVideoUrl) {
+            txtError.text = "Lỗi nhập " + (isEmptyInteractive ? "link interactive" : "link video");
+        } else {
+            txtError.text = "";
+            self.view.endEditing(true);
+            let story = UIStoryboard(name: "Main", bundle: nil);
+            let controller = story.instantiateViewController(withIdentifier: "demoPlayer") as! PlayerViewController;
+//            let ViewController = ViewController(nibName: "PlayerViewController", bundle: nil);
+            controller.interactiveLink = interactiveLink;
+            controller.videoUrl = videoUrl;
+            controller.bottomSafeArea = bottomSafeArea;
+            controller.topSafeArea = topSafeArea
+            controller.tokenApp = token
+            controller.userRole = roleCache
+            controller.uid = uidCache
+            controller.userData = userDataCache
+            controller.channelId = dataChannelId[channel.rawValue]!
+            self.navigationController?.pushViewController(controller, animated: true);
+//            self.present(controller, animated: true, completion: nil);
+        }
+    }
     @IBAction func openInteractive(_ sender: UIButton) {
         print("open interactive=>", txtUid.isAccessibilityElement);
         for itemFieldUser in userDataValue {
@@ -133,7 +211,7 @@ class ViewController: UIViewController, UITextViewDelegate {
             controller.videoUrl = videoUrl;
             controller.bottomSafeArea = bottomSafeArea;
             controller.topSafeArea = topSafeArea
-            controller.tokenApp = getToken()
+            controller.tokenApp = token
             controller.userRole = getUserRole()
             controller.uid = getUid()
             controller.userData = getUserData()
@@ -158,23 +236,58 @@ class ViewController: UIViewController, UITextViewDelegate {
         }
         return userRole
     }
+    func getIndexUserRole(_ role: String) -> Int {
+        let selectedRoleIndex = listUserType.selectedSegmentIndex
+        var indexRole = 0
+        switch(role) {
+            case "admin":
+              indexRole = 0
+              break;
+            case "user":
+              indexRole = 1
+              break;
+            case "guest":
+              indexRole = 2
+              break;
+            default: break
+        }
+        return indexRole
+    }
     func getUid() -> String {
         return txtUid.text!;
     }
-    func getUserData() -> [String: String] {
-        var formatUserData:[String: String] = [:]
+    func getUserData() -> [String: Any] {
+        var formatUserData:[String: Any] = [:]
         for itemFieldUser in userDataValue {
-            let keyData: String = itemFieldUser["key"] ?? ""
-            let valueData: String = itemFieldUser["value"] ?? ""
-            let typeData: String = itemFieldUser["type"] ?? ""
-            if(keyData.count > 0 && valueData.count > 0 && typeData.count > 0) {
-                formatUserData[keyData] = valueData
+            let keyData: String = itemFieldUser["key"] as! String ?? ""
+            let valueData: Any = itemFieldUser["value"]
+            let typeData: String = itemFieldUser["type"] as! String ?? ""
+            if(keyData.count > 0 && typeData.count > 0) {
+                switch(typeData) {
+                case ListFieldType.ListType.boolean.rawValue:
+                    formatUserData[keyData] = valueData
+                    break;
+                case ListFieldType.ListType.number.rawValue:
+                    formatUserData[keyData] = (valueData as! NSString).integerValue
+                    break;
+                default:
+                    formatUserData[keyData] = valueData
+                    break;
+                }
             }
         }
         return formatUserData
     }
     func getToken() -> String {
-        return GenerateToken(getUid(), getUserData(), getUserRole()).genToken()
+        var dataGetToken:[String: Any] = [:]
+        dataGetToken["id"] = getUid()
+        dataGetToken["role"] = getUserRole()
+        dataGetToken["appId"] = "default-app"
+        if(getUserRole() == "guest") {
+            let defaults = UserDefaults.standard
+            defaults.set("", forKey: DefaultsKeysUser.token)
+        }
+        return getUserRole() == "guest" ? "" : GenerateToken(getUid(), getUserData(), getUserRole()).genTokenFromApi()
     }
     @objc func deleteUserValueField(_ sender: UIButton?) {
         print("delete=>", sender?.tag)
@@ -247,6 +360,7 @@ class ViewController: UIViewController, UITextViewDelegate {
                 uiTextViewValue.delegate = self
                 fieldUserValueView.addSubview(uiTextViewValue);
                 fieldUserView.addSubview(fieldUserValueView)
+                userDataValue.append(["key": "", "value": "", "type": typeField.rawValue, "tag": String(keyTag)])
                 break;
             case .boolean:
             let listSelectBoolean: UISegmentedControl = UISegmentedControl(frame: CGRect(x: 0, y: heightOfInPutField, width: self.viewUserData.frame.width/2.0, height: heightOfInPutField));
@@ -264,10 +378,10 @@ class ViewController: UIViewController, UITextViewDelegate {
                 print("fieldValueId=>", listSelectBoolean.accessibilityIdentifier)
                 fieldUserValueView.addSubview(listSelectBoolean);
                 fieldUserView.addSubview(fieldUserValueView)
+                userDataValue.append(["key": "", "value": true, "type": typeField.rawValue, "tag": String(keyTag)])
                 break;
             default: break
         }
-        userDataValue.append(["key": "", "value": "", "type": typeField.rawValue, "tag": String(keyTag)])
         fieldUserView.addSubview(btnDelete)
         fieldUserView.isAccessibilityElement = true
         fieldUserView.accessibilityIdentifier = fieldUserValueContainer + String(keyTag)
@@ -284,7 +398,7 @@ class ViewController: UIViewController, UITextViewDelegate {
             var indexNumber = 0
             var isIndexChange = false
             for itemUserField in userDataValue {
-                if(itemUserField["tag"] == index) {
+                if(itemUserField["tag"] as! String == index) {
                     isIndexChange = true
                 }
                 if(!isIndexChange) {
@@ -292,7 +406,7 @@ class ViewController: UIViewController, UITextViewDelegate {
                 }
             }
             print("indexNumber=>", indexNumber)
-            userDataValue[indexNumber][keySet] = sender.selectedSegmentIndex == 0 ? "true" : "false"
+            userDataValue[indexNumber][keySet] = sender.selectedSegmentIndex == 0
         }
     }
     func textViewDidChange(_ textView: UITextView) {
@@ -305,7 +419,7 @@ class ViewController: UIViewController, UITextViewDelegate {
             var indexNumber = 0
             var isIndexChange = false
             for itemUserField in userDataValue {
-                if(itemUserField["tag"] == index) {
+                if(itemUserField["tag"] as! String == index) {
                     isIndexChange = true
                 }
                 if(!isIndexChange) {
