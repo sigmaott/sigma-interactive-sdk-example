@@ -45,7 +45,7 @@ public class PlayerActivity extends Activity implements Player.Listener {
     //  private static boolean DEBUG = false;
     public static final String VERSION = "2.0.0";
     private static final String HTML_SDK = "https://resource-ott.gviet.vn/sdk/[SDK_VERSION]/android-mobile-interactive.html";
-    private static String sourcePlay = "https://dev-livestream.gviet.vn/manifest/VTV2-PACKAGE/master.m3u8";
+    private static String sourcePlay = "https://live-on-v2.gviet.vn/manifest/test_live/master.m3u8";
     ExoPlayer player;
     Boolean isPlaying;
     @Override

@@ -75,7 +75,7 @@
                     android:id="@+id/txtLinkVideo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="https://dev-livestream.gviet.vn/manifest/VTV3-PACKAGE/master.m3u8" />
+                    android:text="https://live-on-v2.gviet.vn/manifest/test_live/master.m3u8" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
