@@ -85,6 +85,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
         print("videoUrl=>", videoUrl);
         super.viewDidLoad()
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: []);
+        NotificationCenter.default.addObserver(self,selector: #selector(applicationDidBecomeActive),name: UIApplication.didBecomeActiveNotification, object: nil)
         startPlayer();
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -94,6 +95,16 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
         AppUtility.lockOrientation(.portrait)
+        NotificationCenter.default.removeObserver(self,
+            name: UIApplication.didBecomeActiveNotification, // UIApplication.didBecomeActiveNotification for swift 4.2+
+            object: nil)
+    }
+    @objc func applicationDidBecomeActive() {
+        // handle event
+        print("applicationDidBecomeActive=>", videoPlayer?.rate, videoPlayer?.error)
+        if(videoPlayer != nil) {
+            videoPlayer?.play()
+        }
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator);
@@ -154,6 +165,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
         self.sigmaInteractive?.sendDataOnReady();
     }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        print("observeValueKeyPath=>", keyPath)
         if let player = object as? AVPlayer, player == videoPlayer, keyPath == "status" {
             if player.status == .readyToPlay {
                 print("heightDevice=>", self.heightDevice, topSafeArea)
@@ -248,6 +260,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
     private func startPlayer() {
         if let url = URL(string: videoUrl) {
             let asset = AVURLAsset(url: url, options: nil);
+            let playerViewController = AVPlayerViewController()
             playerItem = AVPlayerItem(asset: asset)
             videoPlayer = AVPlayer(playerItem: playerItem)
             videoPlayer?.addObserver(self, forKeyPath: "status", options: [], context: nil)
@@ -256,6 +269,10 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
                 guard let self = self else { return }
                 let seconds = CMTimeGetSeconds(sec)
             }
+            playerViewController.player = videoPlayer
+//            self.present(playerViewController, animated: true) {
+//                playerViewController.player!.play()
+//            }
             videoPlayer?.volume = 1.0
             
             layer = AVPlayerLayer(player: videoPlayer);
@@ -283,8 +300,5 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
             .forEach { $0.removeFromSuperlayer() }
         playerView.backgroundColor = .black
         self.title = ""
-    }
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        print("applicationDidBecomeActive=>")
     }
 }
