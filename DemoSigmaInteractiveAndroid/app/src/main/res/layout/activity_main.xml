@@ -56,7 +56,7 @@
                     android:id="@+id/txtInputLink"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="https://dev-livestream.gviet.vn/ilp-statics/2.0.0/android-mobile-interactive.html" />
+                    android:text="https://resource-ott.gviet.vn/sdk/2.0.0/android-mobile-interactive.html" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -75,7 +75,7 @@
                     android:id="@+id/txtLinkVideo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="https://dev-livestream.gviet.vn/manifest/VTV3-PACKAGE/master.m3u8" />
+                    android:text="https://live-on-v2.gviet.vn/manifest/test_live/master.m3u8" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
