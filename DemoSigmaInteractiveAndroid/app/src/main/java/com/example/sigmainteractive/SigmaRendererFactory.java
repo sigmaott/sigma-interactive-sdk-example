@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Renderer;
+import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.MetadataDecoder;
 import com.google.android.exoplayer2.metadata.MetadataDecoderFactory;
@@ -30,8 +32,8 @@ public class SigmaRendererFactory extends DefaultRenderersFactory {
 
     private Id3ParsedListener mListener;
 
-    public SigmaRendererFactory(Context context, Id3ParsedListener listener) {
-        super(context);
+    public SigmaRendererFactory(Context context, @ExtensionRendererMode int extensionRendererMode, Id3ParsedListener listener) {
+        super(context, extensionRendererMode);
         mListener = listener;
     }
 
@@ -45,6 +47,13 @@ public class SigmaRendererFactory extends DefaultRenderersFactory {
         out.add(new MetadataRenderer(output, outputLooper, new SigmaMetadataDecoderFactory(mListener)));
     }
 
+    public SigmaRendererFactory(
+            Context context,
+            @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
+            @ExtensionRendererMode int extensionRendererMode, Id3ParsedListener listener) {
+        super(context, drmSessionManager, extensionRendererMode);
+        mListener = listener;
+    }
     public static class SigmaMetadataDecoderFactory implements MetadataDecoderFactory {
         private Id3ParsedListener mListener;
         public SigmaMetadataDecoderFactory(Id3ParsedListener listener){
