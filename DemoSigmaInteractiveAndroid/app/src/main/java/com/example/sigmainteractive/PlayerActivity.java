@@ -37,15 +37,16 @@ import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Set;
 
 public class PlayerActivity extends Activity implements Player.Listener {
     View containerView;
-    //  private static boolean DEBUG = false;
-    int estimatedKeyboardHeight = 0;
     public static final String VERSION = "3.0.0";
     private static final String HTML_SDK = "https://dev-livestream.gviet.vn/ilp-statics/[SDK_VERSION]/android-mobile-interactive.html";
     private static String sourcePlay = "https://dev-livestream.gviet.vn/manifest/VTV2-PACKAGE/master.m3u8";
@@ -56,7 +57,6 @@ public class PlayerActivity extends Activity implements Player.Listener {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //
         setContentView(R.layout.activity_player);
         containerView = this.findViewById(android.R.id.content);
         isPlaying = false;
@@ -103,13 +103,17 @@ public class PlayerActivity extends Activity implements Player.Listener {
         });
         StyledPlayerView playerView = (StyledPlayerView) findViewById(R.id.player_view);
         playerView.setPlayer(player);
-        Bundle params = getIntent().getExtras();
-        if (params != null && params.getString("videoLink").length() > 0) {
-            sourcePlay = params.getString("videoLink");
-        }
+        sourcePlay = getKeyParams(Constant.keyVideoLink);
         setupPlayer();
     }
-
+    public String getKeyParams(String key) {
+        Log.d("getKeyParams=>", key);
+        Bundle params = getIntent().getExtras();
+        if (params != null && params.getString(key).length() > 0) {
+            return params.getString(key);
+        }
+        return "";
+    }
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
         Player.Listener.super.onIsPlayingChanged(isPlaying);
@@ -118,7 +122,8 @@ public class PlayerActivity extends Activity implements Player.Listener {
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         Player.Listener.super.onPlayerStateChanged(playWhenReady, playbackState);
-        if(playbackState == Player.STATE_READY) {
+        Log.d("onPlayerStateChanged=>", String.valueOf(playbackState));
+        if(playbackState == Player.STATE_READY && SigmaInteractiveHelper.getInstance(PlayerActivity.this).interactiveView == null) {
             Log.d("onPlayerStateChanged=>", "ready");
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -127,19 +132,36 @@ public class PlayerActivity extends Activity implements Player.Listener {
             StyledPlayerView playerView = (StyledPlayerView) findViewById(R.id.player_view);
             int widthPlayer = playerView.getWidth();
             int heightPlayer = playerView.getHeight();
-            this.openInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0, null);
+            this.openInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0);
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Log.d("onConfigurationChanged", String.valueOf(newConfig.hardKeyboardHidden));
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
-        } else {
-            SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
-        }
+        setLayoutInteractive(newConfig);
+    }
+    public void setLayoutInteractive(Configuration newConfig) {
+        final View view = findViewById(android.R.id.content);
+        ViewTreeObserver observer = view.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = containerView.getHeight();
+                int width = containerView.getWidth();
+                StyledPlayerView playerView = (StyledPlayerView) findViewById(R.id.player_view);
+                int widthPlayer = playerView.getWidth();
+                int heightPlayer = playerView.getHeight();
+                if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0);
+                } else {
+                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0);
+                }
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
     private void setupPlayer(){
         Uri videoUri = Uri.parse(sourcePlay);
@@ -151,14 +173,29 @@ public class PlayerActivity extends Activity implements Player.Listener {
         player.prepare();
         // Start the playback.
         player.play();
+        player.setPlayWhenReady(true);
         isPlaying = true;
     }
-    public JSONObject getDataSend() {
+    public String getNewToken() throws JSONException {
+        try {
+            String userRole = getKeyParams(Constant.keyUserRole);
+            String userId = getKeyParams(Constant.keyUserId);
+            String dataUserString = getKeyParams(Constant.keyUserData);
+            return TokenManager.genToken(userId, userRole, System.currentTimeMillis() + 30*24*60*60*1000, new JSONArray(dataUserString), getApplicationContext());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    public JSONObject getDataSend(boolean isRefreshToken) {
         JSONObject dataSend = null;
         try {
             dataSend = new JSONObject("{}");
-            dataSend.put("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5NzI5NTIyNzIiLCJleHAiOjE2NTQ2NzMzNzQsInJvbGUiOiJ1c2VyIiwiYXBwSWQiOiJkZWZhdWx0LWFwcCIsInVzZXJEYXRhIjp7fX0.-WuVJ5C84j1NOYF1CHYXJr-ZB6hj3uAhyqb_7Ox7hwY");
-            dataSend.put("channelId", "c9c2ebfb-2887-4de6-aec4-0a30aa848915");
+            if(!getKeyParams(Constant.keyUserRole).equals(Constant.roleGuest)) {
+                String tokenSend = isRefreshToken ? getNewToken() : TokenManager.getTokenCache(getApplicationContext());
+                dataSend.put("token", tokenSend);
+            }
+            dataSend.put("channelId", getKeyParams(Constant.keyChannelId));
             dataSend.put("overlay", true);
             dataSend.put("panel", true);
         } catch (JSONException err){
@@ -166,7 +203,7 @@ public class PlayerActivity extends Activity implements Player.Listener {
         }
         return dataSend;
     }
-    private void openInteractiveView(int xInteractiveView, int yInteractiveView, int widthInteractiveView, int heightInteractiveView, int widthPlayer, int heightPlayer, int xPlayer, int yPlayer, Bundle userData) {
+    private void openInteractiveView(int xInteractiveView, int yInteractiveView, int widthInteractiveView, int heightInteractiveView, int widthPlayer, int heightPlayer, int xPlayer, int yPlayer) {
         if (containerView == null) return;
         Bundle params = getIntent().getExtras();
         String interactiveLink = ""; // or other values
@@ -179,21 +216,9 @@ public class PlayerActivity extends Activity implements Player.Listener {
             //Sự kiện khi sdk tương tác sẵn sàng
             @Override
             public void onReady() {
-                JSONObject userDataSend = new JSONObject();
-                if (userData != null) {
-                    Set<String> keys = userData.keySet();
-                    for (String key : keys) {
-                        try {
-                            userDataSend.put(key, JSONObject.wrap(userData.get(key)));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
                 SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView();
-                Log.d("onReady=>", userDataSend.toString());
                 if (interactiveView != null) {
-                    JSONObject dataSend = getDataSend();
+                    JSONObject dataSend = getDataSend(false);
                     Runnable sendData = new Runnable() {
                         @Override
                         public void run() {
@@ -201,7 +226,7 @@ public class PlayerActivity extends Activity implements Player.Listener {
                         }
                     };
                     Handler mHandler = new Handler();
-                    mHandler.postDelayed(sendData, 5000);
+                    mHandler.post(sendData);
 //                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(dataSend);
                 }
             }
@@ -235,11 +260,11 @@ public class PlayerActivity extends Activity implements Player.Listener {
                 Log.d("PlayerActivity=>", "onExitFullScreen");
                 PlayerActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
-
+            //Sự kiện khi hệ thống tương tác yêu cầu gửi lại data
             @Override
             public void fullReload() {
-                //force get new token and send data with new token to onReadyBack function
-                JSONObject finalDataSend = getDataSend();
+                //get datasend with new token
+                JSONObject finalDataSend = getDataSend(true);
                 Runnable sendData = new Runnable() {
                     @Override
                     public void run() {
@@ -247,7 +272,7 @@ public class PlayerActivity extends Activity implements Player.Listener {
                     }
                 };
                 Handler mHandler = new Handler();
-                mHandler.postDelayed(sendData, 0);
+                mHandler.post(sendData);
             }
 
             @Override
@@ -269,9 +294,13 @@ public class PlayerActivity extends Activity implements Player.Listener {
 
     @Override
     protected void onPause() {
-        // simpleExoPlayer.setPlayWhenReady(false);
-        player.release();
         isPlaying = false;
         super.onPause();
     }
+    @Override
+    protected void onStop() {
+        isPlaying = false;
+        super.onStop();
+    }
+
 }
