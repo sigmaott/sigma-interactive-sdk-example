@@ -152,7 +152,7 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
         return userRole == "guest" ? "" : GenerateToken(uid, userData, userRole).genTokenFromApi();
     }
     func getDataSendToInteractive(isReload: Bool) -> [String: Any] {
-        var userData: [String: Any] = ["channelId": self.channelId, "appId": "default-app", "clientVersion": "3.0.0", "panel": true, "overlay": true];
+        var userData: [String: Any] = ["channelId": self.channelId, "panel": true, "overlay": true];
         userData["token"] = isReload ? getTokenAppNew() : getTokenApp();
         print("getDataSendToInteractive=>", userData)
         return userData;
@@ -274,7 +274,6 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
 //                playerViewController.player!.play()
 //            }
             videoPlayer?.volume = 1.0
-            
             layer = AVPlayerLayer(player: videoPlayer);
             layer.backgroundColor = UIColor.white.cgColor
             let heightVideo = widthDevice * (9/16);

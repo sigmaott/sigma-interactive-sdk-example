@@ -237,7 +237,6 @@ SWIFT_CLASS("_TtC19SigmaInteractiveSDK12SigmaWebview")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder SWIFT_UNAVAILABLE;
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent * _Nullable)event SWIFT_WARN_UNUSED_RESULT;
 - (BOOL)shouldUpdateFocusInContext:(UIFocusUpdateContext * _Nonnull)context SWIFT_WARN_UNUSED_RESULT;
-- (BOOL)becomeFirstResponder SWIFT_WARN_UNUSED_RESULT;
 @property (nonatomic, readonly) UIEdgeInsets safeAreaInsets;
 - (nonnull instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration * _Nonnull)configuration SWIFT_UNAVAILABLE;
 @end
