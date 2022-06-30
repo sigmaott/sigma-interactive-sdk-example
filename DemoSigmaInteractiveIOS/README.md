@@ -6,7 +6,7 @@
 
 Thêm file [SigmaInteractiveSDK.framework](https://github.com/phamngochai123/sigma-interactive-sdk-example/tree/mobile-ios/SigmaInteractiveSDK.framework) vào project.
 
-Project -> app target -> General -> Embedded Binaries
+Project -> app target -> Build Phases -> Embedded Binaries
 
 ![Screen Shot 2022-04-22 at 16.27.50](https://i.ibb.co/YyLx4C8/Screen-Shot-2022-04-22-at-16-27-50.png)
 
@@ -19,21 +19,16 @@ Project -> app target -> General -> Embedded Binaries
 ### II. Sử dụng
 
 1. Thêm SigmaInteractive sdk vào project (mục **I**).
-
-2. Import SigmaInteractiveSDK vào file: 
+2. Import SigmaInteractiveSDK vào file:
 
    ```swift
    import SigmaInteractiveSDK
    ```
-
 3. Tạo biến sigmaInteractive type SigmaWebview thể hiện cho view tương tác.
 
    ```swift
    var sigmaInteractive: SigmaWebview?;
    ```
-
-   
-
 4. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
 
    ```swift
@@ -48,7 +43,7 @@ Project -> app target -> General -> Embedded Binaries
                }
            }
        }
-   
+
    private func startPlayer() {
                  ...
            if let url = URL(string: videoUrl) {
@@ -63,10 +58,9 @@ Project -> app target -> General -> Embedded Binaries
            }
        }
    ```
-
 5. Mở view tương tác, set dữ liệu user (bắt buộc), set callback để bắt sự kiện view tương tác khi player bắt đầu play.
 
-   *Lưu ý: callback implement SigmaJSInterface
+   *Lưu ý: callback implement SigmaJSInterface.
 
    ```swift
    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -78,7 +72,7 @@ Project -> app target -> General -> Embedded Binaries
                  //khởi tạo view tương tác
                    self.sigmaInteractive = SigmaWebview.init(interactiveLink);
                  //set dữ liệu user
-                   self.sigmaInteractive?.setUserValue(value: userData);
+                   setDataToInteractive(isReload: false)
                  //set vị trí hiển thị, kích thước của view tương tác và vị trí so với view tương tác, kích thước của view player 
                    self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
                  // hiển thị view tương tác
@@ -92,9 +86,6 @@ Project -> app target -> General -> Embedded Binaries
              ...
        }
    ```
-
-   
-
 6. Bắt sự kiện lắng nghe khi id3 trả ra đúng thời điểm hẹn giờ để gửi dữ liệu cho sdk tương tác
 
    ```swift
@@ -118,17 +109,42 @@ Project -> app target -> General -> Embedded Binaries
 
 - #### SigmaWebview
 
-  #### - setUserValue - set dữ liệu user dạng json string
-  
+  #### - setUserValue - set dữ liệu user dạng Dictionary
+
   ```swift
   self.sigmaInteractive?.setUserValue(value: userData);
+
+  func getDataSendToInteractive(isReload: Bool) -> [String: Any] {
+      //data send to interactive. on-off panel, overlay (on-true, off-false)
+      var userData: [String: Any] = ["channelId": self.channelId, "panel": true, "overlay": true];
+      userData["token"] = isReload ? getTokenAppNew() : getTokenApp();
+      return userData;
+  }
+
+  func setDataToInteractive(isReload: Bool) {
+      let dataSend = getDataSendToInteractive(isReload: isReload);
+      if(isReload) {
+         self.sigmaInteractive?.sendUserValue(value: dataSend);
+      } else {
+         self.sigmaInteractive?.setUserValue(value: dataSend);
+       }
+  }
   ```
-  
 
 #### - setCallBack - set callback để nhận sự kiện view tương tác gọi
 
+#### *Lưu ý: Trong callback có hàm fullReload. Khi hàm này được gọi thì client cần gửi lại data cho hệ thống interactive
+
 ```swift
 self.sigmaInteractive?.setCallBack(sigmaInteractiveCallback: self);
+
+func fullReload() {
+     setDataToInteractive(isReload: true)
+ }
+
+func sendDataToInteractive() {
+     self.sigmaInteractive?.sendDataOnReady();
+}
 ```
 
 #### - sendID3TagInstant - gửi id3 instant cho sdk tương tác
@@ -142,19 +158,12 @@ self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), heigh
 ```
 
 - `x`: Vị trí muốn đặt view tương tác theo trục x.
-
 - `y`: Vị trí muốn đặt view tương tác theo trục y.
-
 - `width`: Chiều rộng của view tương tác.
-
 - `height`: Chiều cao của view tương tác.
-
 - `widthPlayer`: Chiều rộng của player.
-
 - `heightPlayer`: Chiều caocủa player.
-
 - `xPlayer`: Vị trí player theo trục x.
-
 - `yPlayer`: Vị trí player theo trục y.
 
   ```swift
@@ -171,4 +180,3 @@ self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), heigh
           }
       }
   ```
-

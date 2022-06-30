@@ -48,7 +48,6 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
     func fullReload() {
         print("SigmaJSInterface=>fullReload")
         setDataToInteractive(isReload: true)
-        sendDataToInteractive()
     }
     
     func setSession(_ session: String) {
@@ -159,10 +158,11 @@ class PlayerViewController: UIViewController, SigmaJSInterface, AVPlayerItemMeta
     }
     func setDataToInteractive(isReload: Bool) {
         let dataSend = getDataSendToInteractive(isReload: isReload);
-        self.sigmaInteractive?.setUserValue(value: dataSend);
-    }
-    func sendDataToInteractive() {
-        self.sigmaInteractive?.sendDataOnReady();
+        if(isReload) {
+            self.sigmaInteractive?.sendUserValue(value: dataSend);
+        } else {
+            self.sigmaInteractive?.setUserValue(value: dataSend);
+        }
     }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         print("observeValueKeyPath=>", keyPath)

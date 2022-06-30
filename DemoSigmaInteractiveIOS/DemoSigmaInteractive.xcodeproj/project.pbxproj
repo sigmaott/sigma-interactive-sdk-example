@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B174261286D6E400056161F /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B174260286D6E400056161F /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B66464228517FC1005E0399 /* PopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B66464128517FC1005E0399 /* PopupWindow.swift */; };
 		9B6646472852DB23005E0399 /* CodableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6646462852DB23005E0399 /* CodableExtensions.swift */; };
 		9B6646492852DB59005E0399 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6646482852DB59005E0399 /* Utility.swift */; };
@@ -20,8 +21,6 @@
 		9B7D8F7627F43D4D00C683D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B7D8F7427F43D4D00C683D4 /* LaunchScreen.storyboard */; };
 		9B7D8F9127F567A300C683D4 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */; };
 		9B85CBF327FAA3A700B7C935 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85CBF227FAA3A700B7C935 /* AppUtility.swift */; };
-		9BF8CD47286D621B004CDF70 /* SigmaInteractiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8CD46286D621B004CDF70 /* SigmaInteractiveSDK.framework */; };
-		9BF8CD48286D621B004CDF70 /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8CD46286D621B004CDF70 /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +30,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9BF8CD48286D621B004CDF70 /* SigmaInteractiveSDK.framework in Embed Frameworks */,
+				9B174261286D6E400056161F /* SigmaInteractiveSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9B174260286D6E400056161F /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigmaInteractiveSDK.framework; sourceTree = "<group>"; };
 		9B66464128517FC1005E0399 /* PopupWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupWindow.swift; sourceTree = "<group>"; };
 		9B6646462852DB23005E0399 /* CodableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableExtensions.swift; sourceTree = "<group>"; };
 		9B6646482852DB59005E0399 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
@@ -55,7 +55,6 @@
 		9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		9B85CBF227FAA3A700B7C935 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
 		9BF8CD46286D621B004CDF70 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
-		9BF8CD4A286D6235004CDF70 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigmaInteractiveSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +62,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BF8CD47286D621B004CDF70 /* SigmaInteractiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,7 +71,7 @@
 		9B7D8F5D27F43D4000C683D4 = {
 			isa = PBXGroup;
 			children = (
-				9BF8CD4A286D6235004CDF70 /* SigmaInteractiveSDK.framework */,
+				9B174260286D6E400056161F /* SigmaInteractiveSDK.framework */,
 				9B85CBF227FAA3A700B7C935 /* AppUtility.swift */,
 				9B7D8F6827F43D4000C683D4 /* DemoSigmaInteractive */,
 				9B7D8F6727F43D4000C683D4 /* Products */,

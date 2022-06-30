@@ -21,6 +21,7 @@ public protocol SigmaJSInterface {
   @_Concurrency.MainActor(unsafe) public func setPlayerRectView()
   @objc(setUserData:) @_Concurrency.MainActor(unsafe) public func setUserData(value: Swift.String)
   @_Concurrency.MainActor(unsafe) public func setUserValue(value: [Swift.String : Any])
+  @_Concurrency.MainActor(unsafe) public func sendUserValue(value: [Swift.String : Any])
   @objc(sendID3TagInstant:) @_Concurrency.MainActor(unsafe) public func sendID3TagInstant(value: Swift.String)
   @objc(sendID3Tag:) @_Concurrency.MainActor(unsafe) public func sendID3Tag(value: Swift.String)
   @_Concurrency.MainActor(unsafe) public func onShowOverlay()
