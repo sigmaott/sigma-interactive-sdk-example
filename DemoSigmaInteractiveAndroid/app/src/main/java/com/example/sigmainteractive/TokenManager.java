@@ -2,6 +2,8 @@ package com.example.sigmainteractive;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.auth0.jwt.JWT;
@@ -28,8 +30,9 @@ public class TokenManager {
         payloadClaims.put(Constant.roleField, userRole);
         SharePreferencesBase.getInstance(context).setValue(Constant.keyUserRole, userRole);
         SharePreferencesBase.getInstance(context).setValue(Constant.keyUserId, userId);
-        payloadClaims.put(Constant.appIdField, context.getString(R.string.interactive_app_id));
         try {
+            ApplicationInfo app = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            payloadClaims.put(Constant.appIdField, app.metaData.getString("com.sigma.interactive.sdk.appId"));
             Algorithm algorithm = Algorithm.HMAC256(key);
             JWTCreator.Builder builder = JWT.create();
             Map<String, Object> payloadUserData = new HashMap<>();
@@ -62,7 +65,7 @@ public class TokenManager {
                 SharePreferencesBase.getInstance(context).deleteKey(Constant.keyUserData);
             }
             token = builder.withPayload(payloadClaims).sign(algorithm);
-        } catch (JWTCreationException | JSONException exception){
+        } catch (JWTCreationException | JSONException| PackageManager.NameNotFoundException exception){
             //Invalid Signing configuration / Couldn't convert Claims.
         }
         Log.d("TokenGenerate=>", token);

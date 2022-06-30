@@ -4,9 +4,11 @@
 
 ### I. Cài đặt
 
+#### 1. Tích hợp SigmaInteractive sdk
+
 Thêm file [SigmaInteractiveSDK.aar](https://github.com/phamngochai123/sigma-interactive-sdk-example/blob/mobile-android/libs/SigmaInteractiveSDK.aar) vào thư mục libs cùng cấp với thư mục app của project.
 
-Thêm vào app/build.gradle: 
+Thêm dòng sau vào app/build.gradle:
 
 ```java
 dependencies {
@@ -16,13 +18,34 @@ dependencies {
 }
 ```
 
+#### 2. Thêm khai báo appId và version sdk interactive
+
+1. Mở file `/app/res/values/strings.xml` của bạn.
+2. Thêm các thành phần `string` có tên là  `interactive_app_id` và `interactive_app_version`, sau đó đặt những giá trị này thành ID và version của sdk interactive ( sẽ được gửi riêng khi đối tác tích hợp ). Ví dụ: nếu sdk có ID ứng dụng là `default-app` và version là `3.0.0` thì mã sẽ có dạng như sau:
+
+   ```java
+   <string name="interactive_app_id">default-app</string>
+   <string name="interactive_app_version">3.0.0</string>
+   ```
+3. Mở file `/app/manifest/AndroidManifest.xml`.
+4. Thêm các thành phần `meta-data` vào thành phần `application` cho ID và version của bạn:
+
+   ```java
+   <application android:label="@string/app_name" ...>
+       ...
+      	<meta-data android:name="com.sigma.interactive.sdk.appId" android:value="@string/interactive_app_id"/>
+      	<meta-data android:name="com.sigma.interactive.sdk.version" android:value="@string/interactive_app_version"/>
+       ...
+   </application>
+   ```
+
 ### II. Sử dụng
 
-1. Thêm SigmaInteractive sdk vào project (mục **I**).
-
-2. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
+1. #### Thêm SigmaInteractive sdk vào project (mục **I**).
+2. #### Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
 
    [SigmaRendererFactory](https://github.com/phamngochai123/sigma-interactive-sdk-example/blob/mobile-android/app/src/main/java/com/example/sigmainteractive/SigmaRendererFactory.java) xem trong demo
+
 
    ```java
    DefaultRenderersFactory renderersFactory = new SigmaRendererFactory(getApplicationContext(), new SigmaRendererFactory.Id3ParsedListener() {
@@ -46,8 +69,8 @@ dependencies {
    });
    player = new ExoPlayer.Builder(this, renderersFactory).build();
    ```
+3. #### Thêm sự kiện lắng nghe khi id3 trả ra đúng thời điểm hẹn giờ để gửi dữ liệu cho sdk tương tác
 
-3. Thêm sự kiện lắng nghe khi id3 trả ra đúng thời điểm hẹn giờ để gửi dữ liệu cho sdk tương tác
 
    ```java
    player.addAnalyticsListener(new AnalyticsListener() {
@@ -70,16 +93,16 @@ dependencies {
        }
    });
    ```
-
-4. Tạo SigmaWebViewCallback để lắng nghe các sự kiện từ sdk tương tác.
+4. #### Tạo SigmaWebViewCallback để lắng nghe các sự kiện từ sdk tương tác.
 
    4.1 Trong hàm onReady gửi dữ liệu dạng json string cho sdk tương tác (bắt buộc)
+
 
    ```java
    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
    ```
+5. #### Mở view tương tác với vị trí (vị trí (x: 0, y: 0) ở góc trên bên trái màn hình), kích thước. Kích thước player, vị trí player so với view tương tác để sdk tương tác tính toán hiển thị.
 
-5. Mở view tương tác với vị trí (vị trí (x: 0, y: 0) ở góc trên bên trái màn hình), kích thước. Kích thước player, vị trí player so với view tương tác để sdk tương tác tính toán hiển thị.
 
    ```java
    SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
@@ -88,36 +111,23 @@ dependencies {
 - #### SigmaInteractiveHelper
 
   #### - openInteractiveView - Mở view tương tác:
-  
+
   ```java
   SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractive, yInteractive, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
   ```
-  
-  
-  
+
   - `PlayerActivity`: Activity muốn đặt view tương tác.
-  
   - `xInteractive`: Vị trí muốn đặt view tương tác theo trục x.
-  
   - `yInteractive`: Vị trí muốn đặt view tương tác theo trục y.
-  
   - `widthInteractiveView`: Chiều rộng của view tương tác.
-  
   - `heightInteractiveView`: Chiều cao của view tương tác.
-  
   - `url`: Link tương tác.
-  
   - `widthPlayer`: Chiều rộng của player.
-  
   - `heightPlayer`: Chiều caocủa player.
-  
   - `xPlayer`: Vị trí player theo trục x.
-  
   - `yPlayer`: Vị trí player theo trục y.
-  
   - `sigmaWebviewCallback`: Nghe các sự kiện bên tương tác gọi.
-  
-    #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu user cho sdk qua hàm `sendOnReadyBack` 
+    #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu user cho sdk qua hàm `sendOnReadyBack`
 
 ```java
 ex:
@@ -204,7 +214,7 @@ private void openInteractiveView(int xInteractiveView, int yInteractiveView, int
         SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
     }
 
-    
+  
     public JSONObject getDataSend(boolean isRefreshToken) {
         JSONObject dataSend = null;
         try {
@@ -225,6 +235,7 @@ private void openInteractiveView(int xInteractiveView, int yInteractiveView, int
         return dataSend;
     }
 ```
+
 #### - getInteractiveView - lấy view tương tác hiện tại
 
 ```java
@@ -291,19 +302,12 @@ SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView
 ```
 
 - `xInteractive`: Vị trí muốn đặt view tương tác theo trục x.
-
 - `yInteractive`: Vị trí muốn đặt view tương tác theo trục y.
-
 - `widthInteractiveView`: Chiều rộng của view tương tác.
-
 - `heightInteractiveView`: Chiều cao của view tương tác.
-
 - `widthPlayer`: Chiều rộng của player.
-
 - `heightPlayer`: Chiều caocủa player.
-
 - `xPlayer`: Vị trí player theo trục x.
-
 - `yPlayer`: Vị trí player theo trục y.
 
   ```java
