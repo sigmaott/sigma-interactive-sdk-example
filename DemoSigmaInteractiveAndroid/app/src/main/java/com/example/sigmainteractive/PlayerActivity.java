@@ -227,7 +227,6 @@ public class PlayerActivity extends Activity implements Player.Listener {
                     };
                     Handler mHandler = new Handler();
                     mHandler.post(sendData);
-//                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(dataSend);
                 }
             }
 
@@ -264,11 +263,11 @@ public class PlayerActivity extends Activity implements Player.Listener {
             @Override
             public void fullReload() {
                 //get datasend with new token
-                JSONObject finalDataSend = getDataSend(true);
+                JSONObject newDataSend = getDataSend(true);
                 Runnable sendData = new Runnable() {
                     @Override
                     public void run() {
-                        SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(finalDataSend);
+                        SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(newDataSend);
                     }
                 };
                 Handler mHandler = new Handler();
