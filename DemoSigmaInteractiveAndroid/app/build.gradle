@@ -44,5 +44,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.17.0'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.17.0'
+    implementation 'com.auth0:java-jwt:3.19.2'
     implementation files('../libs/SigmaInteractiveSDK.aar')
 }

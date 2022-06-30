@@ -180,11 +180,51 @@ private void openInteractiveView(int xInteractiveView, int yInteractiveView, int
                 Log.d("PlayerActivity=>", "onExitFullScreen");
                 PlayerActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+
+            //Sự kiện khi hệ thống tương tác yêu cầu gửi lại data
+            @Override
+            public void fullReload() {
+                //get datasend with new token
+                JSONObject newDataSend = getDataSend(true);
+                Runnable sendData = new Runnable() {
+                    @Override
+                    public void run() {
+                        SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(newDataSend);
+                    }
+                };
+                Handler mHandler = new Handler();
+                mHandler.post(sendData);
+            }
+
+            @Override
+            public void setSession(String session) {
+                Log.d("setSession=>", session);
+            }
         };
         SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInteractiveView, yInteractiveView, widthInteractiveView, heightInteractiveView, url, sigmaWebviewCallback, widthPlayer, heightPlayer, xPlayer, yPlayer);
     }
-```
 
+    
+    public JSONObject getDataSend(boolean isRefreshToken) {
+        JSONObject dataSend = null;
+        try {
+            dataSend = new JSONObject("{}");
+            //add token to dataSend if userRole is not guest
+            if(!getKeyParams(Constant.keyUserRole).equals(Constant.roleGuest)) {
+                String tokenSend = isRefreshToken ? getNewToken() : TokenManager.getTokenCache(getApplicationContext());
+                dataSend.put("token", tokenSend);
+            }
+            //send id channel
+            dataSend.put("channelId", getKeyParams(Constant.keyChannelId));
+            //on-off overlay, panel (on-true, off-false)
+            dataSend.put("overlay", true);
+            dataSend.put("panel", true);
+        } catch (JSONException err){
+            Log.d("Error", err.toString());
+        }
+        return dataSend;
+    }
+```
 #### - getInteractiveView - lấy view tương tác hiện tại
 
 ```java
@@ -267,17 +307,34 @@ SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView
 - `yPlayer`: Vị trí player theo trục y.
 
   ```java
-  ex:
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-      Log.d("onConfigurationChanged", String.valueOf(newConfig.orientation));
-      super.onConfigurationChanged(newConfig);
-      if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-          SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
-      } else {
-          SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, containerView.getLayoutParams().width, containerView.getLayoutParams().height, containerView.getLayoutParams().width, containerView.getLayoutParams().height, 0, 0);
-      }
-  }
+  ex:@Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setLayoutInteractive(newConfig);
+    }
+    public void setLayoutInteractive(Configuration newConfig) {
+        final View view = findViewById(android.R.id.content);
+        ViewTreeObserver observer = view.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            //event when screen rotation is done
+            @Override
+            public void onGlobalLayout() {
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = containerView.getHeight();
+                int width = containerView.getWidth();
+                StyledPlayerView playerView = (StyledPlayerView) findViewById(R.id.player_view);
+                int widthPlayer = playerView.getWidth();
+                int heightPlayer = playerView.getHeight();
+                if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0);
+                } else {
+                    SigmaInteractiveHelper.getInstance(PlayerActivity.this).setLayoutInteractiveView(0, 0, width, height, widthPlayer, heightPlayer, 0, 0);
+                }
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+    }
   ```
 
 #### - clearInterActiveView - xóa view tương tác
