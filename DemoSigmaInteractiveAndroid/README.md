@@ -134,7 +134,7 @@ SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInt
   - `xPlayer`: Vị trí player theo trục x.
   - `yPlayer`: Vị trí player theo trục y.
   - `sigmaWebviewCallback`: Nghe các sự kiện bên tương tác gọi.
-  - #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu cho sdk qua hàm `sendOnReadyBack`. 
+  - ##### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu cho sdk qua hàm `sendOnReadyBack`. 
 
     Note: Khi nhận được sự kiện fullReload của sdk tương tác cần lấy lại token của app và gửi lại dữ liệu cho sdk qua hàm `sendOnReadyBack`
 
