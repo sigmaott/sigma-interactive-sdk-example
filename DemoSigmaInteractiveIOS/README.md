@@ -192,7 +192,3 @@ self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), heigh
           }
       }
   ```
-
-- setUserValue - set dữ liệu user dạng Dictionary để gửi cho sdk khi nhận được sự kiện onReady
-
-- setUserValue - set dữ liệu user dạng Dictionary để gửi cho sdk khi nhận được sự kiện onReady
