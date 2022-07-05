@@ -98,8 +98,15 @@ player.addAnalyticsListener(new AnalyticsListener() {
 
 4.1 Trong hàm onReady gửi dữ liệu dạng json string cho sdk tương tác (bắt buộc)
 
+   data bao gồm
+
+- token: token app ( string )
+- channelId: id của kênh đang xem ( string )
+- overlay: bật/tắt overlay (boolean, bật-true, tắt false). Nếu bật thì bắt buộc phải thêm sự kiện như mục 2-3
+- panel: bật/tắt panel (boolean, bật-true, tắt-false)
+
 ```java
-SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
+SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(dataSend);
 ```
 
 #### 5. Mở view tương tác với vị trí (vị trí (x: 0, y: 0) ở góc trên bên trái màn hình), kích thước. Kích thước player, vị trí player so với view tương tác để sdk tương tác tính toán hiển thị.
@@ -127,12 +134,9 @@ SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInt
   - `xPlayer`: Vị trí player theo trục x.
   - `yPlayer`: Vị trí player theo trục y.
   - `sigmaWebviewCallback`: Nghe các sự kiện bên tương tác gọi.
-  - #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu user cho sdk qua hàm `sendOnReadyBack`. Dữ liệu bao gồm:
+  - #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu cho sdk qua hàm `sendOnReadyBack`. 
 
-    - token: token app ( string )
-    - channelId: id của kênh đang xem ( string )
-    - overlay: bật/tắt overlay (boolean, bật-true, tắt false). Nếu bật thì bắt buộc phải thêm sự kiện như mục 2-3
-    - panel: bật/tắt panel (boolean, bật-true, tắt-false)
+    Note: Khi nhận được sự kiện fullReload của sdk tương tác cần lấy lại token của app và gửi lại dữ liệu cho sdk qua hàm `sendOnReadyBack`
 
 ```java
 ex:
@@ -148,21 +152,17 @@ private void openInteractiveView(int xInteractiveView, int yInteractiveView, int
             //Sự kiện khi sdk tương tác sẵn sàng
             @Override
             public void onReady() {
-                JSONObject userDataSend = new JSONObject();
-                if (userData != null) {
-                    Set<String> keys = userData.keySet();
-                    for (String key : keys) {
-                        try {
-                            userDataSend.put(key, JSONObject.wrap(userData.get(key)));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                 SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView();
+                SigmaWebView interactiveView = SigmaInteractiveHelper.getInstance(PlayerActivity.this).getInteractiveView();
                 if (interactiveView != null) {
-                    //gửi dữ liệu cho sdk tương tác
-                    interactiveView.sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
+                    JSONObject dataSend = getDataSend(false);
+                    Runnable sendData = new Runnable() {
+                        @Override
+                        public void run() {
+                            SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(dataSend);
+                        }
+                    };
+                    Handler mHandler = new Handler();
+                    mHandler.post(sendData);
                 }
             }
 
