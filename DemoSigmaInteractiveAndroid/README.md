@@ -41,10 +41,9 @@ dependencies {
 
 ### II. Sử dụng
 
-
 #### 1. Thêm SigmaInteractive sdk vào project (mục **I**).
 
-#### 2. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
+#### 2. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác (Bắt buộc nếu hiển thị overlay)
 
 [SigmaRendererFactory](https://github.com/phamngochai123/sigma-interactive-sdk-example/blob/mobile-android/app/src/main/java/com/example/sigmainteractive/SigmaRendererFactory.java) xem trong demo
 
@@ -71,8 +70,7 @@ DefaultRenderersFactory renderersFactory = new SigmaRendererFactory(getApplicati
 player = new ExoPlayer.Builder(this, renderersFactory).build();
 ```
 
-
-#### 3. Thêm sự kiện lắng nghe khi id3 trả ra đúng thời điểm hẹn giờ để gửi dữ liệu cho sdk tương tác
+#### 3. Thêm sự kiện lắng nghe khi id3 trả ra đúng thời điểm hẹn giờ để gửi dữ liệu cho sdk tương tác (Bắt buộc nếu hiển thị overlay)
 
 ```java
 player.addAnalyticsListener(new AnalyticsListener() {
@@ -96,7 +94,6 @@ player.addAnalyticsListener(new AnalyticsListener() {
 });
 ```
 
-
 #### 4. Tạo SigmaWebViewCallback để lắng nghe các sự kiện từ sdk tương tác.
 
 4.1 Trong hàm onReady gửi dữ liệu dạng json string cho sdk tương tác (bắt buộc)
@@ -104,7 +101,6 @@ player.addAnalyticsListener(new AnalyticsListener() {
 ```java
 SigmaInteractiveHelper.getInstance(PlayerActivity.this).sendOnReadyBack(userData != null ? userDataSend.toString() : "{}");
 ```
-
 
 #### 5. Mở view tương tác với vị trí (vị trí (x: 0, y: 0) ở góc trên bên trái màn hình), kích thước. Kích thước player, vị trí player so với view tương tác để sdk tương tác tính toán hiển thị.
 
@@ -131,7 +127,12 @@ SigmaInteractiveHelper.getInstance(PlayerActivity.this).openInteractiveView(xInt
   - `xPlayer`: Vị trí player theo trục x.
   - `yPlayer`: Vị trí player theo trục y.
   - `sigmaWebviewCallback`: Nghe các sự kiện bên tương tác gọi.
-    #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu user cho sdk qua hàm `sendOnReadyBack`
+  - #### Note: Khi nhận được sự kiện onReady của sdk tương tác cần gửi dữ liệu user cho sdk qua hàm `sendOnReadyBack`. Dữ liệu bao gồm:
+
+    - token: token app ( string )
+    - channelId: id của kênh đang xem ( string )
+    - overlay: bật/tắt overlay (boolean, bật-true, tắt false). Nếu bật thì bắt buộc phải thêm sự kiện như mục 2-3
+    - panel: bật/tắt panel (boolean, bật-true, tắt-false)
 
 ```java
 ex:
