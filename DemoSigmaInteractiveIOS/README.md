@@ -16,7 +16,18 @@ Project -> app target -> Build Phases -> Embedded Binaries
 
 ![Screen Shot 2022-04-22 at 16.17.27](https://i.ibb.co/M9489JD/Screen-Shot-2022-04-22-at-16-17-27.jpg)
 
-### II. Sử dụng
+### II. Thêm khai báo appId và version sdk interactive
+
+1. Mở file Info.plist
+2. Thêm các thành phần `string` có tên là SigmaInteractiveAppId và SigmaInteractiveVersion. Sau đó đặt những giá trị này thành ID và version của sdk interactive ( sẽ được gửi riêng khi đối tác tích hợp ). Ví dụ: nếu sdk có ID ứng dụng là `default-app` và version là `3.0.0` thì mã sẽ có dạng như sau:
+   ```swift
+   <key>SigmaInteractiveAppId</key>
+   <string>default-app</string>
+   <key>SigmaInteractiveVersion</key>
+   <string>3.0.0</string>
+   ```
+
+### III. Sử dụng
 
 1. Thêm SigmaInteractive sdk vào project (mục **I**).
 2. Import SigmaInteractiveSDK vào file:
@@ -29,7 +40,7 @@ Project -> app target -> Build Phases -> Embedded Binaries
    ```swift
    var sigmaInteractive: SigmaWebview?;
    ```
-4. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác
+4. Thêm sự kiện lắng nghe khi id3 bắt đầu parse để gửi dữ liệu cho sdk tương tác ( bắt buộc nếu hiển thị overlay )
 
    ```swift
    //create function metadataOutput
@@ -58,9 +69,16 @@ Project -> app target -> Build Phases -> Embedded Binaries
            }
        }
    ```
-5. Mở view tương tác, set dữ liệu user (bắt buộc), set callback để bắt sự kiện view tương tác khi player bắt đầu play.
+5. Mở view tương tác, set dữ liệu để gửi cho sdk interactive (bắt buộc), set callback để bắt sự kiện view tương tác khi player bắt đầu play.
+   dữ liệu bao gồm:
+
+   * token: token app ( string )
+   * channelId: id của kênh đang xem ( string )
+   * overlay: bật/tắt overlay (boolean, bật-true, tắt false). Nếu bật thì bắt buộc phải thêm sự kiện như mục 4
+   * panel: bật/tắt panel (boolean, bật-true, tắt-false)
 
    *Lưu ý: callback implement SigmaJSInterface.
+   Khởi tạo view tương tác: `SigmaWebview.init(interactiveLink);`
 
    ```swift
    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -68,16 +86,12 @@ Project -> app target -> Build Phases -> Embedded Binaries
                if player.status == .readyToPlay {
                    videoPlayer?.play()
                    let heightVideo = self.widthDevice * (9/16);
-                   let userData: [String: Any] = ["id": "386", "phone": "0143100004"];
-                 //khởi tạo view tương tác
+   		// Khởi tạo view tương tác
                    self.sigmaInteractive = SigmaWebview.init(interactiveLink);
-                 //set dữ liệu user
+   		//create and set data để gửi cho sdk khi nhận được sự kiện onReady
                    setDataToInteractive(isReload: false)
-                 //set vị trí hiển thị, kích thước của view tương tác và vị trí so với view tương tác, kích thước của view player 
-                   self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
-                 // hiển thị view tương tác
+                   self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), height: Int(self.heightDevice - topSafeArea), xPlayer: 0, yPlayer: 0, widthPlayer: Int(self.widthDevice), heightPlayer: Int(heightVideo))
                    playerView.addSubview(self.sigmaInteractive!)
-                 //set callback để bắt các sự kiện view tương tác gọi
                    self.sigmaInteractive?.setCallBack(sigmaInteractiveCallback: self);
                } else if player.status == .failed {
                    stopBtnPressed(UIButton())
@@ -107,29 +121,31 @@ Project -> app target -> Build Phases -> Embedded Binaries
        }
    ```
 
-- #### SigmaWebview
+#### SigmaWebview
 
-  #### - setUserValue - set dữ liệu user dạng Dictionary
+#### - setUserValue - set dữ liệu user dạng Dictionary để gửi cho sdk khi nhận được sự kiện onReady
 
-  ```swift
-  self.sigmaInteractive?.setUserValue(value: userData);
+#### - sendUserValue - gửi dữ liệu user cho sdk interactive
 
-  func getDataSendToInteractive(isReload: Bool) -> [String: Any] {
-      //data send to interactive. on-off panel, overlay (on-true, off-false)
-      var userData: [String: Any] = ["channelId": self.channelId, "panel": true, "overlay": true];
-      userData["token"] = isReload ? getTokenAppNew() : getTokenApp();
-      return userData;
-  }
+```swift
+self.sigmaInteractive?.setUserValue(value: userData);
 
-  func setDataToInteractive(isReload: Bool) {
-      let dataSend = getDataSendToInteractive(isReload: isReload);
-      if(isReload) {
-         self.sigmaInteractive?.sendUserValue(value: dataSend);
-      } else {
-         self.sigmaInteractive?.setUserValue(value: dataSend);
-       }
-  }
-  ```
+func getDataSendToInteractive(isReload: Bool) -> [String: Any] {
+    //data send to interactive. on-off panel, overlay (on-true, off-false)
+    var userData: [String: Any] = ["channelId": self.channelId, "panel": true, "overlay": true];
+    userData["token"] = isReload ? getTokenAppNew() : getTokenApp();
+    return userData;
+}
+
+func setDataToInteractive(isReload: Bool) {
+    let dataSend = getDataSendToInteractive(isReload: isReload);
+    if(isReload) {
+       self.sigmaInteractive?.sendUserValue(value: dataSend);
+    } else {
+       self.sigmaInteractive?.setUserValue(value: dataSend);
+     }
+}
+```
 
 #### - setCallBack - set callback để nhận sự kiện view tương tác gọi
 
@@ -141,10 +157,6 @@ self.sigmaInteractive?.setCallBack(sigmaInteractiveCallback: self);
 func fullReload() {
      setDataToInteractive(isReload: true)
  }
-
-func sendDataToInteractive() {
-     self.sigmaInteractive?.sendDataOnReady();
-}
 ```
 
 #### - sendID3TagInstant - gửi id3 instant cho sdk tương tác
@@ -180,3 +192,7 @@ self.sigmaInteractive!.setLayout(x: 0, y: 0, width: Int(self.widthDevice), heigh
           }
       }
   ```
+
+- setUserValue - set dữ liệu user dạng Dictionary để gửi cho sdk khi nhận được sự kiện onReady
+
+- setUserValue - set dữ liệu user dạng Dictionary để gửi cho sdk khi nhận được sự kiện onReady

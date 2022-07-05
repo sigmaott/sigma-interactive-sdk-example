@@ -21,5 +21,9 @@
 			</array>
 		</dict>
 	</dict>
+    <key>SigmaInteractiveAppId</key>
+    <string>default-app</string>
+    <key>SigmaInteractiveVersion</key>
+    <string>3.0.0</string>
 </dict>
 </plist>

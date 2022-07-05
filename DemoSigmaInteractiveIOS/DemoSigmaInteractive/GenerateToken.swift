@@ -77,10 +77,13 @@ class GenerateToken {
 //        return token
 //    }
     public func convertDicToJsonString() -> String {
+        let sigmaInteractiveVersion = Bundle.main.object(forInfoDictionaryKey: "SigmaInteractiveVersion") as? String
+        let sigmaInteractiveAppId = Bundle.main.object(forInfoDictionaryKey: "SigmaInteractiveAppId") as? String
+        print("convertDicToJsonString=>", sigmaInteractiveAppId, sigmaInteractiveVersion)
         var dataGetToken:[String: Any] = [:]
         dataGetToken["id"] = uid;
         dataGetToken["role"] = role
-        dataGetToken["appId"] = "default-app"
+        dataGetToken["appId"] = sigmaInteractiveAppId
         if userData.count > 0 {
             dataGetToken["userData"] = userData
         }
