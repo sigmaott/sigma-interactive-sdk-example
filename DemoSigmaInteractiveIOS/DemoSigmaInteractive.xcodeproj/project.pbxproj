@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9B4F04B52812ACF40002F0CB /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B7D8F6A27F43D4000C683D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6927F43D4000C683D4 /* AppDelegate.swift */; };
 		9B7D8F6C27F43D4000C683D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6B27F43D4000C683D4 /* SceneDelegate.swift */; };
 		9B7D8F6E27F43D4000C683D4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F6D27F43D4000C683D4 /* ViewController.swift */; };
@@ -16,6 +15,8 @@
 		9B7D8F7627F43D4D00C683D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B7D8F7427F43D4D00C683D4 /* LaunchScreen.storyboard */; };
 		9B7D8F9127F567A300C683D4 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */; };
 		9B85CBF327FAA3A700B7C935 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85CBF227FAA3A700B7C935 /* AppUtility.swift */; };
+		9BBF1A78288E97BA003A6DF2 /* SigmaInteractiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBF1A77288E97BA003A6DF2 /* SigmaInteractiveSDK.framework */; };
+		9BBF1A7A288E97C7003A6DF2 /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBF1A79288E97C7003A6DF2 /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,7 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9B4F04B52812ACF40002F0CB /* SigmaInteractiveSDK.framework in Embed Frameworks */,
+				9BBF1A7A288E97C7003A6DF2 /* SigmaInteractiveSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -33,7 +34,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
 		9B7D8F6627F43D4000C683D4 /* DemoSigmaInteractive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoSigmaInteractive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B7D8F6927F43D4000C683D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B7D8F6B27F43D4000C683D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +44,8 @@
 		9B7D8F7727F43D4D00C683D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		9B85CBF227FAA3A700B7C935 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
+		9BBF1A77288E97BA003A6DF2 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
+		9BBF1A79288E97C7003A6DF2 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigmaInteractiveSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BBF1A78288E97BA003A6DF2 /* SigmaInteractiveSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,7 +63,7 @@
 		9B7D8F5D27F43D4000C683D4 = {
 			isa = PBXGroup;
 			children = (
-				9B4F04B42812ACF40002F0CB /* SigmaInteractiveSDK.framework */,
+				9BBF1A79288E97C7003A6DF2 /* SigmaInteractiveSDK.framework */,
 				9B85CBF227FAA3A700B7C935 /* AppUtility.swift */,
 				9B7D8F6827F43D4000C683D4 /* DemoSigmaInteractive */,
 				9B7D8F6727F43D4000C683D4 /* Products */,
@@ -94,6 +97,7 @@
 		9B7D8F8627F43E1F00C683D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BBF1A77288E97BA003A6DF2 /* SigmaInteractiveSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

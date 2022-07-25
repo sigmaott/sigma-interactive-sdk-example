@@ -1,0 +1,42 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
+// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name SigmaInteractiveSDK
+import Foundation
+@_exported import SigmaInteractiveSDK
+import Swift
+import WebKit
+import _Concurrency
+public protocol SigmaJSInterface {
+  func onReady()
+  func onShowOverlay()
+  func onHideOverlay()
+  func onForceFullScreen()
+  func onExitFullScreen()
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SigmaWebview : WebKit.WKWebView, WebKit.WKScriptMessageHandler, SigmaInteractiveSDK.SigmaJSInterface, WebKit.WKUIDelegate, WebKit.WKNavigationDelegate {
+  @_Concurrency.MainActor(unsafe) public init(_ interactiveLink: Swift.String)
+  @_Concurrency.MainActor(unsafe) @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping (WebKit.WKNavigationActionPolicy) -> Swift.Void)
+  @_Concurrency.MainActor(unsafe) public func setPlayerRectView()
+  @objc(setUserData:) @_Concurrency.MainActor(unsafe) public func setUserData(value: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func setUserValue(value: [Swift.String : Any])
+  @objc(sendID3TagInstant:) @_Concurrency.MainActor(unsafe) public func sendID3TagInstant(value: Swift.String)
+  @objc(sendID3Tag:) @_Concurrency.MainActor(unsafe) public func sendID3Tag(value: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func onShowOverlay()
+  @_Concurrency.MainActor(unsafe) public func onHideOverlay()
+  @_Concurrency.MainActor(unsafe) public func onForceFullScreen()
+  @_Concurrency.MainActor(unsafe) public func onExitFullScreen()
+  @_Concurrency.MainActor(unsafe) public func onChangeOverlayRects(payload: Swift.Array<Any>)
+  @_Concurrency.MainActor(unsafe) @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
+  @objc(loadWithUrl:) @_Concurrency.MainActor(unsafe) public func loadUrl(url: Swift.String)
+  @objc(setX:setY:setWidth:setHeight:setXPlayer:setYPlayer:setWidthPlayer:setHeightPlayer:) @_Concurrency.MainActor(unsafe) public func setLayout(x: Swift.Int, y: Swift.Int, width: Swift.Int, height: Swift.Int, xPlayer: Swift.Int, yPlayer: Swift.Int, widthPlayer: Swift.Int, heightPlayer: Swift.Int)
+  @objc(setViewOrientation:) @_Concurrency.MainActor(unsafe) public func setViewOrientation(orientation: Swift.String)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func point(inside point: CoreGraphics.CGPoint, with event: UIKit.UIEvent?) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) public func onReady()
+  @_Concurrency.MainActor(unsafe) public func setCallBack(sigmaInteractiveCallback: SigmaInteractiveSDK.SigmaJSInterface)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func shouldUpdateFocus(in context: UIKit.UIFocusUpdateContext) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func becomeFirstResponder() -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var safeAreaInsets: UIKit.UIEdgeInsets {
+    @_Concurrency.MainActor(unsafe) @objc get
+  }
+  @objc deinit
+}

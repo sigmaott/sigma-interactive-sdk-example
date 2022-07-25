@@ -18,15 +18,19 @@
 		</data>
 		<key>Modules/SigmaInteractiveSDK.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		mqkXh2MFtcetBEjfc5ZoSMXEHCo=
+		3DA0TBTjus3J0BOq6Si88rGIr1g=
 		</data>
 		<key>Modules/SigmaInteractiveSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
 		VnTBSudEF+USe81sWRj29PAwzUA=
 		</data>
+		<key>Modules/SigmaInteractiveSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
+		<data>
+		r6CDkl9CyCiQ9ez6uDWBEzl3Hys=
+		</data>
 		<key>Modules/SigmaInteractiveSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		SAC8HX2wqsfQR3RnpWsVZOywZjI=
+		bbyO956veW5uYL7GCEGyD12eQRo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -53,7 +57,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8PIjL+jytGF0GrnDYwy/9+vgbK4YBtdYoaX9GIo/iw0=
+			zeXktv6GTeHBDuDRw/hOD0W0rAO/uHMKL3TTvGf2Ss0=
 			</data>
 		</dict>
 		<key>Modules/SigmaInteractiveSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
@@ -63,11 +67,18 @@
 			QEibBVioLyFlL9amnMwtMa3auO37s6DG7TzI4Si+b3o=
 			</data>
 		</dict>
+		<key>Modules/SigmaInteractiveSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sTmdonQS/xUulZnQyvu7lcLwEAwsT0DQpdSlNLqFV9Q=
+			</data>
+		</dict>
 		<key>Modules/SigmaInteractiveSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			m8G/cw0s9Mr6jxNNkIjIoBeY0m5wAzdGbsr4CXQuL6E=
+			r5tZCatuu4K8KHSoprtZ9Lx+HVFT/ESDeK45fteCdCg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
