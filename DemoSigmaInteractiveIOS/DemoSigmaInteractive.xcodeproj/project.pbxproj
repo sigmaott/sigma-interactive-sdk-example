@@ -15,20 +15,19 @@
 		9B7D8F7627F43D4D00C683D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B7D8F7427F43D4D00C683D4 /* LaunchScreen.storyboard */; };
 		9B7D8F9127F567A300C683D4 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */; };
 		9B85CBF327FAA3A700B7C935 /* AppUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85CBF227FAA3A700B7C935 /* AppUtility.swift */; };
-		9BBF1A78288E97BA003A6DF2 /* SigmaInteractiveSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBF1A77288E97BA003A6DF2 /* SigmaInteractiveSDK.framework */; };
-		9BBF1A7A288E97C7003A6DF2 /* SigmaInteractiveSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBF1A79288E97C7003A6DF2 /* SigmaInteractiveSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BBF1B82288FDC00003A6DF2 /* SigmaInteractiveSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBF1B81288FDC00003A6DF2 /* SigmaInteractiveSDK.xcframework */; };
+		9BBF1B84288FDC0D003A6DF2 /* SigmaInteractiveSDK.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9BBF1B81288FDC00003A6DF2 /* SigmaInteractiveSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9B4F0446281276850002F0CB /* Embed Frameworks */ = {
+		9BBF1B83288FDC06003A6DF2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolderSpec = 7;
 			files = (
-				9BBF1A7A288E97C7003A6DF2 /* SigmaInteractiveSDK.framework in Embed Frameworks */,
+				9BBF1B84288FDC0D003A6DF2 /* SigmaInteractiveSDK.xcframework in CopyFiles */,
 			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -44,8 +43,7 @@
 		9B7D8F7727F43D4D00C683D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B7D8F9027F567A300C683D4 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		9B85CBF227FAA3A700B7C935 /* AppUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtility.swift; sourceTree = "<group>"; };
-		9BBF1A77288E97BA003A6DF2 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SigmaInteractiveSDK.framework; path = "../../sdk-interactive-mobile-ios/SigmaInteractiveSDK.framework"; sourceTree = "<group>"; };
-		9BBF1A79288E97C7003A6DF2 /* SigmaInteractiveSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SigmaInteractiveSDK.framework; sourceTree = "<group>"; };
+		9BBF1B81288FDC00003A6DF2 /* SigmaInteractiveSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SigmaInteractiveSDK.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BBF1A78288E97BA003A6DF2 /* SigmaInteractiveSDK.framework in Frameworks */,
+				9BBF1B82288FDC00003A6DF2 /* SigmaInteractiveSDK.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,7 +61,6 @@
 		9B7D8F5D27F43D4000C683D4 = {
 			isa = PBXGroup;
 			children = (
-				9BBF1A79288E97C7003A6DF2 /* SigmaInteractiveSDK.framework */,
 				9B85CBF227FAA3A700B7C935 /* AppUtility.swift */,
 				9B7D8F6827F43D4000C683D4 /* DemoSigmaInteractive */,
 				9B7D8F6727F43D4000C683D4 /* Products */,
@@ -97,7 +94,7 @@
 		9B7D8F8627F43E1F00C683D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9BBF1A77288E97BA003A6DF2 /* SigmaInteractiveSDK.framework */,
+				9BBF1B81288FDC00003A6DF2 /* SigmaInteractiveSDK.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,7 +109,7 @@
 				9B7D8F6227F43D4000C683D4 /* Sources */,
 				9B7D8F6327F43D4000C683D4 /* Frameworks */,
 				9B7D8F6427F43D4000C683D4 /* Resources */,
-				9B4F0446281276850002F0CB /* Embed Frameworks */,
+				9BBF1B83288FDC06003A6DF2 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -330,7 +327,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QDX5365AY6;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64, arm64e, armv7";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64, armv7 arm64e,";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
